@@ -1,0 +1,21 @@
+<div class="token-container">
+  
+  <h1>Consultar Pedido</h1>
+  <p>
+    Por favor, insira o token de acompanhamento que foi enviado para o seu e-mail quando você finalizou a solicitação.
+  </p>
+
+  <form class="token-form">
+    <div class="form-group">
+      <label for="token-input">Seu Token de Acompanhamento</label>
+      <input type="text" id="token-input" placeholder="Cole o seu token aqui..." #tokenInput>
+    </div>
+    
+   <button type="button" class="btn-primario" (click)="consultarToken(tokenInput.value)">Consultar</button>
+  </form>
+
+  <div class="voltar-link-container">
+    <a routerLink="/" class="link-secundario">&larr; Voltar para a Home</a>
+  </div>
+
+</div>

@@ -1,0 +1,204 @@
+<form id="wizard-form" (submit)="$event.preventDefault()">
+    
+    <div class="stepper" *ngIf="passoAtual !== 5">
+        <div class="step" [class.step-active]="passoAtual >= 1">
+            <span>1</span> Informações
+        </div>
+        <div class="step-line"></div>
+        <div class="step" [class.step-active]="passoAtual >= 2">
+            <span>2</span> Tipo
+        </div>
+        <div class="step-line"></div>
+        <div class="step" [class.step-active]="passoAtual >= 3">
+            <span>3</span> Conteúdo
+        </div>
+        <div class="step-line"></div>
+        <div class="step" [class.step-active]="passoAtual >= 4">
+            <span>4</span> Prazos e Roteiro
+        </div>
+    </div>
+
+    <div class="passo" [class.passo-ativo]="passoAtual === 1">
+        <h2>Solicitação de Produção</h2>
+        
+        <div>
+            <label for="nome_solicitante">Nome do Solicitante</label>
+            <input type="text" id="nome_solicitante" name="nome_solicitante">
+        </div>
+        <div>
+            <label for="setor">Setor</label>
+            <input type="text" id="setor" name="setor" placeholder="Ex: SEEC, DIRED, Escola X...">
+        </div>
+        <div>
+            <label for="ponto_focal">Nome do Ponto Focal</label>
+            <input type="text" id="ponto_focal" name="ponto_focal" placeholder="Quem acompanhará o projeto">
+        </div>
+        <div>
+            <label for="telefone_focal">Telefone do Ponto Focal</label>
+            <input type="tel" id="telefone_focal" name="telefone_focal" placeholder="(XX) 9XXXX-XXXX">
+        </div>
+        <div>
+            <label for="estudio">Estúdio de Gravação</label>
+            <select id="estudio" name="estudio">
+                <option value="">Selecione o local...</option>
+                <option value="natal">Natal</option>
+                <option value="mossoro">Mossoró</option>
+                <option value="pau_dos_ferros">Pau dos Ferros</option>
+                <option value="caico">Caicó</option>
+            </select>
+        </div>
+        <div class="grid-duplo">
+            <div>
+                <label for="data_gravacao">Data Pretendida</label>
+                <input type="date" id="data_gravacao" name="data_gravacao">
+            </div>
+            <div>
+                <label for="hora_gravacao">Horário Pretendido</label>
+                <input type="time" id="hora_gravacao" name="hora_gravacao">
+            </div>
+        </div>
+        <div class="botoes-navegacao" style="justify-content: flex-end;">
+            <button type="button" class="btn-primario" (click)="proximoPasso(2)" style="width: auto;">Avançar</button>
+        </div>
+    </div>
+
+    <div class="passo" [class.passo-ativo]="passoAtual === 2">
+        <h2>Qual o tipo de produção?</h2>
+        <div class="tipo-producao">
+            <div>
+                <input type="radio" id="tipo-institucional" name="tipo_producao" value="institucional" data-limit="15">
+                <label for="tipo-institucional">
+                    Vídeo Institucional
+                    <small>Ex: Apresentação do setor</small>
+                </label>
+            </div>
+            <div>
+                <input type="radio" id="tipo-chamada" name="tipo_producao" value="chamada" data-limit="5">
+                <label for="tipo-chamada">
+                    Chamada
+                    <small>Ex: Convite para evento</small>
+                </label>
+            </div>
+            <div>
+                <input type="radio" id="tipo-reels" name="tipo_producao" value="reels" data-limit="3">
+                <label for="tipo-reels">
+                    Reels / Short
+                    <small>Vídeo curto (vertical)</small>
+                </label>
+            </div>
+            <div>
+                <input type="radio" id="tipo-videoaula" name="tipo_producao" value="videoaula" data-limit="3">
+                <label for="tipo-videoaula">
+                    Video-Aula
+                    <small>Ex: Aula expositiva</small>
+                </label>
+            </div>
+            <div>
+                <input type="radio" id="tipo-live" name="tipo_producao" value="live" data-limit="10">
+                <label for="tipo-live">
+                    Live
+                    <small>Transmissão ao vivo</small>
+                </label>
+            </div>
+             <div>
+                <input type="radio" id="tipo-podcast" name="tipo_producao" value="podcast" data-limit="6">
+                <label for="tipo-podcast">
+                    Podcast / Mesacast
+                    <small>Formato de áudio/bate-papo</small>
+                </label>
+            </div>
+        </div>
+        <div class="botoes-navegacao">
+            <button type="button" class="btn-secundario" (click)="passoAnterior(1)">Voltar</button>
+            <button type="button" class="btn-primario" (click)="proximoPasso(3)" style="width: auto;">Avançar</button>
+        </div>
+    </div>
+
+    <div class="passo" [class.passo-ativo]="passoAtual === 3">
+        <h2>Detalhes do Conteúdo</h2>
+        <div>
+            <label for="titulo_video">Título do Vídeo / Live</label>
+            <input type="text" id="titulo_video" name="titulo_video">
+        </div>
+        <div>
+            <label for="descricao_youtube">Descrição (para YouTube/Redes)</label>
+            <textarea id="descricao_youtube" name="descricao_youtube" placeholder="Texto que aparecerá na descrição do vídeo."></textarea>
+        </div>
+        <div>
+            <label for="thumbnail">Thumbnail (Capa do Projeto)</label>
+            <input type="file" id="thumbnail" name="thumbnail" accept="image/png, image/jpeg">
+            <small>Envie um arquivo PNG ou JPG (Tamanho ideal: 1920x1080px)</small>
+        </div>
+        <div class="checkbox-group">
+            <label>Acessibilidade</label>
+            <div class="checkbox-horizontal">
+                <label for="acess-libras">
+                    <input type="checkbox" id="acess-libras" name="acessibilidade" value="libras">
+                    Incluir LIBRAS
+                </label>
+                <label for="acess-legenda">
+                    <input type="checkbox" id="acess-legenda" name="acessibilidade" value="legenda">
+                    Incluir Legenda
+                </label>
+                <label for="acess-na">
+                    <input type="checkbox" id="acess-na" name="acessibilidade" value="na">
+                    Não se aplica
+                </label>
+            </div>
+        </div>
+        <div>
+            <label for="distribuicao">Distribuição do Material</label>
+            <select id="distribuicao" name="distribuicao">
+                <option value="">Selecione onde será distribuído...</option>
+                <option value="proprio_setor">Próprio Setor</option>
+                <option value="seec">SEEC</option>
+                <option value="interna">Veiculação Interna</option>
+                <option value="outro">Outro</option>
+                <option value="na">Não se aplica</option>
+            </select>
+        </div>
+        <div class="botoes-navegacao">
+            <button type="button" class="btn-secundario" (click)="passoAnterior(2)">Voltar</button>
+            <button type="button" class="btn-primario" (click)="proximoPasso(4)" style="width: auto;">Avançar</button>
+        </div>
+    </div>
+
+    <div class="passo" [class.passo-ativo]="passoAtual === 4">
+        <h2>Prazos e Roteiro</h2>
+        <div>
+            <label for="data_limite">Data Limite para Entrega</label>
+            <input type="date" id="data_limite" name="data_limite">
+        </div>
+        <div>
+            <label for="qtd_pessoas">Quantidade de Pessoas na Gravação</label>
+            <input type="number" id="qtd_pessoas" name="qtd_pessoas" value="1" min="1" max="99">
+            <small id="limite-pessoas-info">O limite de pessoas será ajustado com base no Tipo de Produção.</small>
+        </div>
+        <div>
+            <label for="roteiro_anexo">Anexar Roteiro</label>
+            <input type="file" id="roteiro_anexo" name="roteiro_anexo" accept=".pdf,.doc,.docx,.txt">
+        </div>
+        <div>
+            <label for="observacoes">Observações</label>
+            <textarea id="observacoes" name="observacoes" 
+                placeholder="Descreva de forma simples como você imagina o vídeo. O roteiro não precisa ser técnico..."></textarea>
+        </div>
+        <div class="botoes-navegacao">
+            <button type="button" class="btn-secundario" (click)="passoAnterior(3)">Voltar</button>
+            <button type="submit" class="btn-primario" (click)="proximoPasso(5)" style="width: auto;">Enviar Solicitação</button>
+        </div>
+    </div>
+    
+    <div class="passo" [class.passo-ativo]="passoAtual === 5">
+        <h2 style="color: #10B881;">Solicitação enviada com sucesso!</h2>
+        <p style="text-align: center; font-size: 1.1rem; line-height: 1.6;">
+            Obrigado! Seu pedido foi enviado para nossa equipe de gestão.
+            <br>
+            Você receberá as próximas updates no seu e-mail.
+        </p>
+        <div class="botoes-navegacao" style="justify-content: center; margin-top: 3rem;">
+            <a routerLink="/" class="btn-secundario">Voltar ao Início</a>
+        </div>
+    </div>
+
+</form>
