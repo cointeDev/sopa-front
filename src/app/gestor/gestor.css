@@ -1,0 +1,71 @@
+/* --- ESTILO DO PAINEL GERAL --- */
+.gestor-painel {
+    max-width: 1200px;
+    /* O painel pode ser largo */
+    margin: 40px auto;
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    /* Garante que o conteúdo não vaze */
+}
+
+/* --- ESTILO DA NAVEGAÇÃO POR ABAS --- */
+.gestor-nav {
+    display: flex;
+    background-color: #F9FAFB;
+    /* Fundo cinza claro para as abas */
+    border-bottom: 2px solid #E5E7EB;
+    /* Linha divisória */
+    padding: 0 2.5rem;
+    /* Alinha com o padding do conteúdo */
+    gap: 1.5rem;
+    /* Espaço entre os links */
+}
+
+.gestor-nav a {
+    padding: 1rem 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #6B7280;
+    /* Cor da aba inativa (cinza) */
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    /* Borda inferior invisível */
+    margin-bottom: -2px;
+    /* Puxa o link para baixo para a borda ficar alinhada */
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.gestor-nav a:hover {
+    color: #111827;
+    /* Cor ao passar o mouse */
+}
+
+/* Estilo da ABA ATIVA */
+.gestor-nav a.active {
+    color: #4F46E5;
+    /* Cor primária (roxo/azul) */
+    border-bottom-color: #4F46E5;
+    /* Borda inferior visível */
+}
+
+/* --- ESTILO DO CONTEÚDO DAS ABAS --- */
+.gestor-conteudo {
+    padding: 2.5rem;
+}
+
+/* Oculta as abas que não estão ativas.
+  O *ngIf no HTML já faz isso, mas isso é uma garantia extra.
+*/
+.aba {
+    display: none;
+}
+
+/* Esta é a classe que o *ngIf vai aplicar quando for verdadeiro.
+  O Angular é rápido o suficiente, mas para garantir, usamos [class.active] no HTML
+*/
+div[ng-reflect-ng-if="true"] {
+    display: block;
+}

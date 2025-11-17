@@ -6,6 +6,7 @@ import { WizardComponent } from './wizard/wizard';
 import { LoginComponent } from './login/login'; 
 import { TokenComponent } from './token/token'; 
 import { StatusComponent } from './status/status';
+import { GestorComponent } from './gestor/gestor';
 
 // 2. Defina as regras de navegação
 export const routes: Routes = [
@@ -26,7 +27,11 @@ export const routes: Routes = [
         component: TokenComponent 
     },
     {
-        path: 'status/:token', // URL: /token
+        path: 'status/token', // URL: /token
         component: StatusComponent 
     },
+    {
+        path: 'gestor', // URL: /gestor
+        component: GestorComponent
+    }
 ];

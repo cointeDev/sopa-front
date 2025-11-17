@@ -238,3 +238,25 @@ button.btn-primario {
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
 }
+
+/* --- NOVO: Estilo do Container da Descrição --- */
+/* --- NOVO: Estilo do Container da Descrição --- */
+.descricao-container {
+  /* Removemos o fundo, borda e padding */
+  margin-top: 2rem; /* Espaço acima do texto */
+  margin-bottom: 2rem; /* Espaço abaixo do texto */
+}
+
+.descricao-container h3 {
+  color: #111827; /* Preto */
+  font-size: 1.1rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.descricao-container p {
+  color: #374151; /* Cinza escuro */
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}

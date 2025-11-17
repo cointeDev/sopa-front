@@ -1,0 +1,34 @@
+<div class="gestor-painel">
+
+    <nav class="gestor-nav">
+        <a (click)="mudarAba('dashboard')" [class.active]="abaAtual === 'dashboard'">
+            Dashboard
+        </a>
+        <a (click)="mudarAba('quadro')" [class.active]="abaAtual === 'quadro'">
+            Quadro de Produção
+        </a>
+        <a (click)="mudarAba('agenda')" [class.active]="abaAtual === 'agenda'">
+            Agenda do Estúdio
+        </a>
+    </nav>
+
+    <div class="gestor-conteudo">
+
+        <div class="aba" *ngIf="abaAtual === 'dashboard'">
+            <h2>Dashboard (Ações Pendentes + BI)</h2>
+            <p>(Conteúdo do Dashboard aqui...)</p>
+        </div>
+
+        <div class="aba" *ngIf="abaAtual === 'quadro'">
+            <h2>Quadro de Produção (Kanban)</h2>
+            <p>(Conteúdo do Quadro Kanban aqui...)</p>
+        </div>
+
+        <div class="aba" *ngIf="abaAtual === 'agenda'">
+            <h2>Agenda do Estúdio (Calendário)</h2>
+            <p>(Conteúdo da Agenda aqui...)</p>
+        </div>
+
+    </div>
+
+</div>

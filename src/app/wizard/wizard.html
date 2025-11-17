@@ -1,5 +1,5 @@
 <form id="wizard-form" (submit)="$event.preventDefault()">
-    
+
     <div class="stepper" *ngIf="passoAtual !== 5">
         <div class="step" [class.step-active]="passoAtual >= 1">
             <span>1</span> Informações
@@ -20,7 +20,7 @@
 
     <div class="passo" [class.passo-ativo]="passoAtual === 1">
         <h2>Solicitação de Produção</h2>
-        
+
         <div>
             <label for="nome_solicitante">Nome do Solicitante</label>
             <input type="text" id="nome_solicitante" name="nome_solicitante">
@@ -57,57 +57,71 @@
                 <input type="time" id="hora_gravacao" name="hora_gravacao">
             </div>
         </div>
-        <div class="botoes-navegacao" style="justify-content: flex-end;">
+        <div class="botoes-navegacao">
+            <a routerLink="/" class="btn-secundario">Voltar</a>
             <button type="button" class="btn-primario" (click)="proximoPasso(2)" style="width: auto;">Avançar</button>
         </div>
     </div>
 
     <div class="passo" [class.passo-ativo]="passoAtual === 2">
         <h2>Qual o tipo de produção?</h2>
+
         <div class="tipo-producao">
             <div>
-                <input type="radio" id="tipo-institucional" name="tipo_producao" value="institucional" data-limit="15">
+                <input type="radio" id="tipo-institucional" name="tipo_producao" value="institucional" data-limit="15"
+                    (change)="atualizarDescricao('Um vídeo para apresentar formalmente o seu setor, um projeto ou a instituição como um todo.')">
                 <label for="tipo-institucional">
                     Vídeo Institucional
                     <small>Ex: Apresentação do setor</small>
                 </label>
             </div>
             <div>
-                <input type="radio" id="tipo-chamada" name="tipo_producao" value="chamada" data-limit="5">
+                <input type="radio" id="tipo-chamada" name="tipo_producao" value="chamada" data-limit="5"
+                    (change)="atualizarDescricao('Um vídeo curto e direto, focado em convidar o público para um evento, inscrição ou ação específica.')">
                 <label for="tipo-chamada">
                     Chamada
                     <small>Ex: Convite para evento</small>
                 </label>
             </div>
             <div>
-                <input type="radio" id="tipo-reels" name="tipo_producao" value="reels" data-limit="3">
+                <input type="radio" id="tipo-reels" name="tipo_producao" value="reels" data-limit="3"
+                    (change)="atualizarDescricao('Vídeo curto em formato vertical (9:16), ideal para consumo rápido em redes sociais como Instagram e TikTok.')">
                 <label for="tipo-reels">
                     Reels / Short
                     <small>Vídeo curto (vertical)</small>
                 </label>
             </div>
             <div>
-                <input type="radio" id="tipo-videoaula" name="tipo_producao" value="videoaula" data-limit="3">
+                <input type="radio" id="tipo-videoaula" name="tipo_producao" value="videoaula" data-limit="3"
+                    (change)="atualizarDescricao('Formato de aula expositiva, focado na explicação de um conteúdo didático, geralmente com apoio de slides ou lousa.')">
                 <label for="tipo-videoaula">
                     Video-Aula
                     <small>Ex: Aula expositiva</small>
                 </label>
             </div>
             <div>
-                <input type="radio" id="tipo-live" name="tipo_producao" value="live" data-limit="10">
+                <input type="radio" id="tipo-live" name="tipo_producao" value="live" data-limit="10"
+                    (change)="atualizarDescricao('Transmissão ao vivo para interação direta com o público, ideal para eventos, debates ou anúncios importantes.')">
                 <label for="tipo-live">
                     Live
                     <small>Transmissão ao vivo</small>
                 </label>
             </div>
-             <div>
-                <input type="radio" id="tipo-podcast" name="tipo_producao" value="podcast" data-limit="6">
+            <div>
+                <input type="radio" id="tipo-podcast" name="tipo_producao" value="podcast" data-limit="6"
+                    (change)="atualizarDescricao('Produção focada em áudio (Podcast) ou em vídeo de bate-papo (Mesacast), ideal para entrevistas e discussões.')">
                 <label for="tipo-podcast">
                     Podcast / Mesacast
                     <small>Formato de áudio/bate-papo</small>
                 </label>
             </div>
         </div>
+
+        <div class="descricao-container" *ngIf="descricaoSelecionada">
+            <h3>Descrição do Formato</h3>
+            <p>{{ descricaoSelecionada }}</p>
+        </div>
+
         <div class="botoes-navegacao">
             <button type="button" class="btn-secundario" (click)="passoAnterior(1)">Voltar</button>
             <button type="button" class="btn-primario" (click)="proximoPasso(3)" style="width: auto;">Avançar</button>
@@ -122,7 +136,8 @@
         </div>
         <div>
             <label for="descricao_youtube">Descrição (para YouTube/Redes)</label>
-            <textarea id="descricao_youtube" name="descricao_youtube" placeholder="Texto que aparecerá na descrição do vídeo."></textarea>
+            <textarea id="descricao_youtube" name="descricao_youtube"
+                placeholder="Texto que aparecerá na descrição do vídeo."></textarea>
         </div>
         <div>
             <label for="thumbnail">Thumbnail (Capa do Projeto)</label>
@@ -180,15 +195,16 @@
         </div>
         <div>
             <label for="observacoes">Observações</label>
-            <textarea id="observacoes" name="observacoes" 
+            <textarea id="observacoes" name="observacoes"
                 placeholder="Descreva de forma simples como você imagina o vídeo. O roteiro não precisa ser técnico..."></textarea>
         </div>
         <div class="botoes-navegacao">
             <button type="button" class="btn-secundario" (click)="passoAnterior(3)">Voltar</button>
-            <button type="submit" class="btn-primario" (click)="proximoPasso(5)" style="width: auto;">Enviar Solicitação</button>
+            <button type="submit" class="btn-primario" (click)="proximoPasso(5)" style="width: auto;">Enviar
+                Solicitação</button>
         </div>
     </div>
-    
+
     <div class="passo" [class.passo-ativo]="passoAtual === 5">
         <h2 style="color: #10B881;">Solicitação enviada com sucesso!</h2>
         <p style="text-align: center; font-size: 1.1rem; line-height: 1.6;">

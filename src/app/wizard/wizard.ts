@@ -1,28 +1,31 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // <-- 1. PRECISAMOS DISSO
-import { RouterLink } from '@angular/router'; // <-- 2. PRECISAMOS DISSO
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common'; // <-- Verifique se está aqui
+import { RouterLink } from '@angular/router'; 
 
 @Component({
   selector: 'app-wizard',
   standalone: true,
-  imports: [CommonModule, RouterLink], // <-- 3. E DISSO
-  templateUrl: './wizard.html', // (ou ./wizard.component.html)
-  styleUrl: './wizard.css' // (ou ./wizard.component.css)
+  imports: [CommonModule, RouterLink], 
+  templateUrl: './wizard.html', 
+  styleUrl: './wizard.css' 
 })
-export class WizardComponent { // (ou export class Wizard)
-
-  // 4. ADICIONE TODO O CÓDIGO ABAIXO DENTRO DA CLASSE
+export class WizardComponent implements OnInit { // (ou export class Wizard)
 
   public passoAtual: number = 1;
+  
+  // 1. ADICIONE ESTA NOVA VARIÁVEL
+  public descricaoSelecionada: string = ''; // Guarda o texto da descrição
 
   constructor() { }
 
+  ngOnInit(): void {
+    // (A lógica do token vai aqui, mas não precisamos mexer nela)
+  }
+
   proximoPasso(numeroPasso: number) {
-    // Chama a função de trava ao sair do passo 2
     if (this.passoAtual === 2) {
       this.atualizarLimitePessoas();
     }
-
     this.passoAtual = numeroPasso;
     this.scrollToTop();
   }
@@ -32,15 +35,21 @@ export class WizardComponent { // (ou export class Wizard)
     this.scrollToTop();
   }
 
-  // Função para rolar para o topo (melhora a usabilidade)
+  // 2. ADICIONE ESTA NOVA FUNÇÃO
+  // Esta função é chamada pelo (change) no HTML
+  atualizarDescricao(novaDescricao: string) {
+    this.descricaoSelecionada = novaDescricao;
+  }
+
+  // Função para rolar para o topo
   scrollToTop() {
-    // Encontra o <form> e rola para o topo
     const formElement = document.getElementById('wizard-form');
     if (formElement) {
       formElement.scrollIntoView();
     }
   }
 
+  // Função da trava de pessoas (já deve existir)
   atualizarLimitePessoas() {
     const tipoSelecionado = document.querySelector('input[name="tipo_producao"]:checked') as HTMLInputElement;
     const campoQtdPessoas = document.getElementById('qtd_pessoas') as HTMLInputElement;
@@ -50,20 +59,18 @@ export class WizardComponent { // (ou export class Wizard)
       const limite = tipoSelecionado.getAttribute('data-limit');
       const tipoTexto = tipoSelecionado.labels ? tipoSelecionado.labels[0].textContent?.trim().split('\n')[0] : 'produção';
 
-      campoQtdPessoas.max = limite || '99'; // Define o limite máximo no campo
+      campoQtdPessoas.max = limite || '99';
       
-      // Reseta o valor se for maior que o novo limite
       if (parseInt(campoQtdPessoas.value) > parseInt(campoQtdPessoas.max)) {
         campoQtdPessoas.value = campoQtdPessoas.max;
       }
       
       infoQtdPessoas.textContent = `Limite para ${tipoTexto}: ${limite} pessoas.`;
-      infoQtdPessoas.style.color = "#4F46E5"; // Destaca a informação
+      infoQtdPessoas.style.color = "#4F46E5";
     } else if (infoQtdPessoas) {
-      // Caso nenhum seja selecionado
       campoQtdPessoas.max = '99';
       infoQtdPessoas.textContent = "O limite de pessoas será ajustado com base no Tipo de Produção.";
-      infoQtdPessoas.style.color = "#6B7280"; // Cor padrão
+      infoQtdPessoas.style.color = "#6B7280";
     }
   }
 }
