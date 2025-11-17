@@ -1,17 +1,39 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // <-- 1. IMPORTAR
-import { RouterLink } from '@angular/router'; // <-- 2. IMPORTAR
+import { CommonModule } from '@angular/common';
+import { RouterLink, Router } from '@angular/router'; // <-- 1. IMPORTE O Router
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, RouterLink], // <-- 3. ADICIONAR AQUI
-  templateUrl: './login.html', // (ou ./login.component.html)
-  styleUrl: './login.css' // (ou ./login.component.css)
+  imports: [CommonModule, RouterLink], 
+  templateUrl: './login.html', 
+  styleUrl: './login.css' 
 })
-export class LoginComponent { // (ou export class Login)
+export class LoginComponent { 
 
-  constructor() { }
+  // 2. INJETE O ROUTER AQUI
+  constructor(private router: Router) { }
 
-  // No futuro, a lógica de login (chamar a API) virá aqui
+  // 3. ADICIONE A FUNÇÃO DE LOGIN
+  fazerLogin(email: string) {
+    // Lógica de simulação com os 3 e-mails
+    if (email === 'gestor@sopa.com') {
+      // Navega para a tela do Gestor
+      this.router.navigate(['/gestor']);
+
+    } else if (email === 'gerente@sopa.com') {
+      // Navega para a tela do Gerente (que ainda vamos criar)
+      // this.router.navigate(['/gerente']);
+      alert('Login de GERENTE (rota /gerente ainda não criada)');
+
+    } else if (email === 'op@sopa.com') {
+      // Navega para a tela Operacional (que ainda vamos criar)
+      this.router.navigate(['/operacional']);
+      
+
+    } else {
+      // E-mail inválido
+      alert('E-mail não reconhecido.');
+    }
+  }
 }

@@ -1,41 +1,52 @@
-/* --- ESTILO DO CABEÇALHO (NOVO) --- */
-.gestor-header {
+/* --- ESTILO DO PAINEL GERAL --- */
+.operacional-painel {
+  max-width: 1200px; /* O painel pode ser largo */
+  margin: 40px auto;
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  overflow: hidden; 
+}
+
+/* --- ESTILO DO CABEÇALHO (Abas + Sair) --- */
+.operacional-header {
   display: flex;
   justify-content: space-between; /* Abas na esquerda, Sair na direita */
   align-items: center;
   background-color: #F9FAFB; /* Fundo cinza claro */
   border-bottom: 2px solid #E5E7EB; /* Linha divisória */
-  padding: 0 1.5rem 0 2.5rem; /* Padding (um pouco menos na direita) */
+  padding: 0 1.5rem 0 2.5rem; 
 }
 
 /* --- ESTILO DA NAVEGAÇÃO POR ABAS --- */
-.gestor-nav {
+.operacional-nav {
   display: flex;
   gap: 1.5rem; /* Espaço entre os links */
 }
 
-.gestor-nav a {
+.operacional-nav a {
   padding: 1rem 0.5rem;
   font-size: 1rem;
   font-weight: 600;
   color: #6B7280; /* Cor da aba inativa (cinza) */
   text-decoration: none;
-  border-bottom: 3px solid transparent; /* Borda inferior invisível */
-  margin-bottom: -2px; /* Puxa o link para baixo */
+  border-bottom: 3px solid transparent; 
+  margin-bottom: -2px; /* Alinha a borda */
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.gestor-nav a:hover {
-  color: #111827; /* Cor ao passar o mouse */
+.operacional-nav a:hover {
+  color: #111827; 
 }
 
-.gestor-nav a.active {
+/* Estilo da ABA ATIVA */
+.operacional-nav a.active {
   color: #4F46E5; /* Cor primária (roxo/azul) */
-  border-bottom-color: #4F46E5; /* Borda inferior visível */
+  border-bottom-color: #4F46E5; 
 }
 
-/* --- ESTILO DO BOTÃO SAIR (NOVO) --- */
+/* --- ESTILO DO BOTÃO SAIR --- */
 .btn-sair {
   font-size: 0.9rem;
   font-weight: 600;
@@ -51,21 +62,33 @@
   color: #111827;
 }
 
+/* --- ESTILO DO CONTEÚDO DAS ABAS --- */
+.operacional-conteudo {
+  padding: 2.5rem;
+}
+
+.aba {
+  display: none;
+}
+/* Garante que a aba ativa seja exibida */
+div[ng-reflect-ng-if="true"] {
+  display: block;
+}
 /* --- NOVO: Estilo da Saudação --- */
-.gestor-saudacao {
+.operacional-saudacao {
   /* Espaçamento abaixo da saudação, antes do conteúdo da aba */
   margin-bottom: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid #E5E7EB; /* Linha divisória */
 }
 
-.gestor-saudacao h2 {
+.operacional-saudacao h2 {
   font-size: 1.8rem;
   color: #111827; /* Preto */
   margin: 0 0 0.25rem 0; /* Pouca margem inferior */
 }
 
-.gestor-saudacao p {
+.operacional-saudacao p {
   font-size: 1rem;
   color: #6B7280; /* Cinza */
   margin: 0;

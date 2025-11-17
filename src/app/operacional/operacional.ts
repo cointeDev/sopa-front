@@ -4,25 +4,24 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router'; 
 
 @Component({
-  selector: 'app-gestor',
+  selector: 'app-operacional',
   standalone: true,
   imports: [CommonModule, RouterLink], 
-  templateUrl: './gestor.html',
-  styleUrl: './gestor.css'
+  templateUrl: './operacional.html',
+  styleUrl: './operacional.css'
 })
 // 2. IMPLEMENTAMOS O OnInit
-export class GestorComponent implements OnInit { 
+export class OperacionalComponent implements OnInit { 
 
-  public abaAtual: string = 'dashboard';
+  public abaAtual: string = 'tarefas';
   
   // 3. ADICIONAMOS AS NOVAS VARIÁVEIS
   public greeting: string = ''; // Ex: "Bom dia"
-  public userName: string = 'Gestor Local'; // (Simulado por enquanto)
+  public userName: string = 'Maria'; // (Simulado para o Operacional)
 
   constructor() { }
 
   // 4. ADICIONAMOS A FUNÇÃO ngOnInit
-  // (Esta função roda automaticamente quando o componente carrega)
   ngOnInit(): void {
     this.setGreeting();
   }
