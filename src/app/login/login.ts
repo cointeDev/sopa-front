@@ -5,11 +5,11 @@ import { RouterLink, Router } from '@angular/router'; // <-- 1. IMPORTE O Router
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, RouterLink], 
-  templateUrl: './login.html', 
-  styleUrl: './login.css' 
+  imports: [CommonModule, RouterLink],
+  templateUrl: './login.html',
+  styleUrl: './login.css'
 })
-export class LoginComponent { 
+export class LoginComponent {
 
   // 2. INJETE O ROUTER AQUI
   constructor(private router: Router) { }
@@ -21,15 +21,14 @@ export class LoginComponent {
       // Navega para a tela do Gestor
       this.router.navigate(['/gestor']);
 
-    } else if (email === 'gerente@sopa.com') {
-      // Navega para a tela do Gerente (que ainda vamos criar)
-      // this.router.navigate(['/gerente']);
-      alert('Login de GERENTE (rota /gerente ainda não criada)');
+    } else if (email === 'geral@sopa.com') {
+      // Navega para a tela do Gestor Geral
+      this.router.navigate(['/gestor-geral']);
 
     } else if (email === 'op@sopa.com') {
       // Navega para a tela Operacional (que ainda vamos criar)
       this.router.navigate(['/operacional']);
-      
+
 
     } else {
       // E-mail inválido

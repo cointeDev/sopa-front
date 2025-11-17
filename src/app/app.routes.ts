@@ -8,7 +8,9 @@ import { TokenComponent } from './token/token';
 import { StatusComponent } from './status/status';
 import { GestorComponent } from './gestor/gestor';
 import { OperacionalComponent } from './operacional/operacional';
-// 2. Defina as regras de navegação
+import { GestorGeralComponent } from './gestor-geral/gestor-geral';
+
+//  regras de navegação
 export const routes: Routes = [
     {
         path: '', // URL: /
@@ -36,6 +38,10 @@ export const routes: Routes = [
     },
     {
         path: 'operacional', // URL: /operacional
-        component: OperacionalComponent // <-- 2. ADICIONE A ROTA AQUI
+        component: OperacionalComponent 
+    },
+    {
+        path: 'gestor-geral', // URL: /gestor-geral
+        component: GestorGeralComponent
     }
 ];

@@ -2,9 +2,18 @@
 
   <header class="gestor-header">
     <nav class="gestor-nav">
-      <a (click)="mudarAba('dashboard')" [class.active]="abaAtual === 'dashboard'">Dashboard</a>
-      <a (click)="mudarAba('quadro')" [class.active]="abaAtual === 'quadro'">Quadro de Produção</a>
-      <a (click)="mudarAba('agenda')" [class.active]="abaAtual === 'agenda'">Agenda do Estúdio</a>
+      <a (click)="mudarAba('dashboard')" 
+         [class.active]="abaAtual === 'dashboard'">
+        Dashboard
+      </a>
+      <a (click)="mudarAba('quadro')" 
+         [class.active]="abaAtual === 'quadro'">
+        Quadro de Produção
+      </a>
+      <a (click)="mudarAba('agenda')" 
+         [class.active]="abaAtual === 'agenda'">
+        Agenda do Estúdio
+      </a>
     </nav>
     <a routerLink="/" class="btn-sair">Sair</a>
   </header>
@@ -17,14 +26,153 @@
     </div>
 
     <div class="aba" *ngIf="abaAtual === 'dashboard'">
-      </div>
+      <h2>Dashboard (Ações Pendentes + BI)</h2>
+      <p>(Conteúdo do Dashboard aqui...)</p>
+    </div>
 
     <div class="aba" *ngIf="abaAtual === 'quadro'">
+      
+      <div class="board-controls">
+        <h2>Quadro de Produção</h2>
+        <div class="view-toggle">
+          <button (click)="mudarVisao('focada')" [class.active]="visaoQuadro === 'focada'">
+            ☷ Visão Focada
+          </button>
+          <button (click)="mudarVisao('geral')" [class.active]="visaoQuadro === 'geral'">
+            ⠿ Visão Geral
+          </button>
+        </div>
       </div>
+
+      <div class="operational-filter-bar">
+        <button class="btn-operacional active">Todos</button>
+        <button class="btn-operacional">Editor A</button>
+        <button class="btn-operacional">LIBRAS</button>
+        <button class="btn-operacional">Revisor LP</button>
+      </div>
+
+      <div class="board-view-general" *ngIf="visaoQuadro === 'geral'">
+        
+        <div class="board-container-scroll" cdkDropListGroup>
+
+          <div class="board-list" id="standby">
+            <div class="board-list-header"><h3>Standby</h3><button class="maximize-btn" (click)="focarLista('standby')">↗</button></div>
+            <div class="cards" cdkDropList [cdkDropListData]="standby" (cdkDropListDropped)="drop($event)">
+              <div *ngFor="let card of standby" class="board-card" cdkDrag>{{ card.titulo }}</div>
+            </div>
+          </div>
+          
+          <div class="board-list" id="para-producao-semanal">
+            <div class="board-list-header"><h3>Para Produção Semanal</h3><button class="maximize-btn" (click)="focarLista('para-producao-semanal')">↗</button></div>
+            <div class="cards" cdkDropList [cdkDropListData]="paraProducaoSemanal" (cdkDropListDropped)="drop($event)">
+              <div *ngFor="let card of paraProducaoSemanal" class="board-card" cdkDrag>{{ card.titulo }}</div>
+            </div>
+          </div>
+          
+          <div class="board-list" id="ao-vivo">
+            <div class="board-list-header"><h3>Ao Vivo</h3><button class="maximize-btn" (click)="focarLista('ao-vivo')">↗</button></div>
+            <div class="cards" cdkDropList [cdkDropListData]="aoVivo" (cdkDropListDropped)="drop($event)">
+              <div *ngFor="let card of aoVivo" class="board-card" cdkDrag>{{ card.titulo }}</div>
+            </div>
+          </div>
+
+          <div class="board-list" id="gravado">
+            <div class="board-list-header"><h3>Gravado</h3><button class="maximize-btn" (click)="focarLista('gravado')">↗</button></div>
+            <div class="cards" cdkDropList [cdkDropListData]="gravado" (cdkDropListDropped)="drop($event)">
+              <div *ngFor="let card of gravado" class="board-card" cdkDrag>{{ card.titulo }}</div>
+            </div>
+          </div>
+          
+          <div class="board-list" id="edicao1">
+            <div class="board-list-header"><h3>Edição 1 (Decupagem)</h3><button class="maximize-btn" (click)="focarLista('edicao1')">↗</button></div>
+            <div class="cards" cdkDropList [cdkDropListData]="edicao1" (cdkDropListDropped)="drop($event)">
+              <div *ngFor="let card of edicao1" class="board-card" cdkDrag>{{ card.titulo }}</div>
+            </div>
+          </div>
+
+          <div class="board-list" id="edicao2">
+            <div class="board-list-header"><h3>Edição 2 (Ilustração)</h3><button class="maximize-btn" (click)="focarLista('edicao2')">↗</button></div>
+            <div class="cards" cdkDropList [cdkDropListData]="edicao2" (cdkDropListDropped)="drop($event)">
+              <div *ngFor="let card of edicao2" class="board-card" cdkDrag>{{ card.titulo }}</div>
+            </div>
+          </div>
+
+          <div class="board-list" id="edicao3">
+            <div class="board-list-header"><h3>Edição 3</h3><button class="maximize-btn" (click)="focarLista('edicao3')">↗</button></div>
+            <div class="cards" cdkDropList [cdkDropListData]="edicao3" (cdkDropListDropped)="drop($event)">
+              <div *ngFor="let card of edicao3" class="board-card" cdkDrag>{{ card.titulo }}</div>
+            </div>
+          </div>
+          
+          <div class="board-list" id="edicao-final">
+            <div class="board-list-header"><h3>Edição Final</h3><button class="maximize-btn" (click)="focarLista('edicao-final')">↗</button></div>
+            <div class="cards" cdkDropList [cdkDropListData]="edicaoFinal" (cdkDropListDropped)="drop($event)">
+              <div *ngFor="let card of edicaoFinal" class="board-card" cdkDrag>{{ card.titulo }}</div>
+            </div>
+          </div>
+
+          <div class="board-list" id="libras">
+            <div class="board-list-header"><h3>Estudo / Gravação Libras</h3><button class="maximize-btn" (click)="focarLista('libras')">↗</button></div>
+            <div class="cards" cdkDropList [cdkDropListData]="libras" (cdkDropListDropped)="drop($event)">
+              <div *ngFor="let card of libras" class="board-card" cdkDrag>{{ card.titulo }}</div>
+            </div>
+          </div>
+
+          <div class="board-list" id="revisao-lp">
+            <div class="board-list-header"><h3>Revisão LP</h3><button class="maximize-btn" (click)="focarLista('revisao-lp')">↗</button></div>
+            <div class="cards" cdkDropList [cdkDropListData]="revisaoLP" (cdkDropListDropped)="drop($event)">
+              <div *ngFor="let card of revisaoLP" class="board-card" cdkDrag>{{ card.titulo }}</div>
+            </div>
+          </div>
+
+          <div class="board-list" id="producao-lse">
+            <div class="board-list-header"><h3>Produção LSE</h3><button class="maximize-btn" (click)="focarLista('producao-lse')">↗</button></div>
+            <div class="cards" cdkDropList [cdkDropListData]="producaoLSE" (cdkDropListDropped)="drop($event)">
+              <div *ngFor="let card of producaoLSE" class="board-card" cdkDrag>{{ card.titulo }}</div>
+            </div>
+          </div>
+          
+          <div class="board-list" id="concluido">
+            <div class="board-list-header"><h3>Concluído</h3><button class="maximize-btn" (click)="focarLista('concluido')">↗</button></div>
+            <div class="cards" cdkDropList [cdkDropListData]="concluido" (cdkDropListDropped)="drop($event)">
+              <div *ngFor="let card of concluido" class="board-card card-finalizado" cdkDrag>{{ card.titulo }}</div>
+            </div>
+          </div>
+
+          <div class="board-list" id="publicado">
+            <div class="board-list-header"><h3>Publicado no Youtube</h3><button class="maximize-btn" (click)="focarLista('publicado')">↗</button></div>
+            <div class="cards" cdkDropList [cdkDropListData]="publicado" (cdkDropListDropped)="drop($event)">
+              <div *ngFor="let card of publicado" class="board-card card-finalizado" cdkDrag>{{ card.titulo }}</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="board-view-focused" *ngIf="visaoQuadro === 'focada'">
+        
+        <div class="board-list" *ngIf="listaFocada === 'standby'"><div class="board-list-header"><h3>Standby</h3><button class="maximize-btn" (click)="focarLista('standby')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="standby" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of standby" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
+        <div class="board-list" *ngIf="listaFocada === 'para-producao-semanal'"><div class="board-list-header"><h3>Para Produção Semanal</h3><button class="maximize-btn" (click)="focarLista('para-producao-semanal')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="paraProducaoSemanal" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of paraProducaoSemanal" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
+        <div class="board-list" *ngIf="listaFocada === 'ao-vivo'"><div class="board-list-header"><h3>Ao Vivo</h3><button class="maximize-btn" (click)="focarLista('ao-vivo')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="aoVivo" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of aoVivo" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
+        <div class="board-list" *ngIf="listaFocada === 'gravado'"><div class="board-list-header"><h3>Gravado</h3><button class="maximize-btn" (click)="focarLista('gravado')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="gravado" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of gravado" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
+        <div class="board-list" *ngIf="listaFocada === 'edicao1'"><div class="board-list-header"><h3>Edição 1 (Decupagem)</h3><button class="maximize-btn" (click)="focarLista('edicao1')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="edicao1" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of edicao1" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
+        <div class="board-list" *ngIf="listaFocada === 'edicao2'"><div class="board-list-header"><h3>Edição 2 (Ilustração)</h3><button class="maximize-btn" (click)="focarLista('edicao2')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="edicao2" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of edicao2" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
+        <div class="board-list" *ngIf="listaFocada === 'edicao3'"><div class="board-list-header"><h3>Edição 3</h3><button class="maximize-btn" (click)="focarLista('edicao3')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="edicao3" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of edicao3" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
+        <div class="board-list" *ngIf="listaFocada === 'edicao-final'"><div class="board-list-header"><h3>Edição Final</h3><button class="maximize-btn" (click)="focarLista('edicao-final')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="edicaoFinal" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of edicaoFinal" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
+        <div class="board-list" *ngIf="listaFocada === 'libras'"><div class="board-list-header"><h3>Estudo / Gravação Libras</h3><button class="maximize-btn" (click)="focarLista('libras')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="libras" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of libras" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
+        <div class="board-list" *ngIf="listaFocada === 'revisao-lp'"><div class="board-list-header"><h3>Revisão LP</h3><button class="maximize-btn" (click)="focarLista('revisao-lp')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="revisaoLP" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of revisaoLP" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
+        <div class="board-list" *ngIf="listaFocada === 'producao-lse'"><div class="board-list-header"><h3>Produção LSE</h3><button class="maximize-btn" (click)="focarLista('producao-lse')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="producaoLSE" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of producaoLSE" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
+        <div class="board-list" *ngIf="listaFocada === 'concluido'"><div class="board-list-header"><h3>Concluído</h3><button class="maximize-btn" (click)="focarLista('concluido')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="concluido" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of concluido" class="board-card card-finalizado" cdkDrag>{{ card.titulo }}</div></div></div>
+        <div class="board-list" *ngIf="listaFocada === 'publicado'"><div class="board-list-header"><h3>Publicado no Youtube</h3><button class="maximize-btn" (click)="focarLista('publicado')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="publicado" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of publicado" class="board-card card-finalizado" cdkDrag>{{ card.titulo }}</div></div></div>
+
+      </div>
+
+    </div>
 
     <div class="aba" *ngIf="abaAtual === 'agenda'">
-      </div>
+      <h2>Agenda do Estúdio (Calendário)</h2>
+      <p>(Conteúdo da Agenda aqui...)</p>
+    </div>
 
   </div>
-
 </div>
