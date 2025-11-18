@@ -2,20 +2,14 @@
 
   <header class="gestor-header">
     <nav class="gestor-nav">
-      <a (click)="mudarAba('dashboard')" 
-         [class.active]="abaAtual === 'dashboard'">
-        Dashboard
-      </a>
-      <a (click)="mudarAba('quadro')" 
-         [class.active]="abaAtual === 'quadro'">
-        Quadro de Produção
-      </a>
-      <a (click)="mudarAba('agenda')" 
-         [class.active]="abaAtual === 'agenda'">
-        Agenda do Estúdio
-      </a>
+      <a (click)="mudarAba('dashboard')" [class.active]="abaAtual === 'dashboard'">Dashboard</a>
+      <a (click)="mudarAba('quadro')" [class.active]="abaAtual === 'quadro'">Quadro de Produção</a>
+      <a (click)="mudarAba('agenda')" [class.active]="abaAtual === 'agenda'">Agenda do Estúdio</a>
     </nav>
-    <a routerLink="/" class="btn-sair">Sair</a>
+    <div class="gestor-actions">
+      <button class="btn-novo-card" (click)="openModal()">+ Novo Card</button>
+      <a routerLink="/" class="btn-sair">Sair</a>
+    </div>
   </header>
 
   <div class="gestor-conteudo">
@@ -30,149 +24,227 @@
       <p>(Conteúdo do Dashboard aqui...)</p>
     </div>
 
-    <div class="aba" *ngIf="abaAtual === 'quadro'">
-      
+    <div class="aba" *ngIf="abaAtual === 'quadro'" cdkDropListGroup>
+
       <div class="board-controls">
         <h2>Quadro de Produção</h2>
         <div class="view-toggle">
-          <button (click)="mudarVisao('focada')" [class.active]="visaoQuadro === 'focada'">
-            ☷ Visão Focada
-          </button>
-          <button (click)="mudarVisao('geral')" [class.active]="visaoQuadro === 'geral'">
-            ⠿ Visão Geral
-          </button>
+          <button (click)="mudarVisao('focada')" [class.active]="visaoQuadro === 'focada'">☷ Visão Focada</button>
+          <button (click)="mudarVisao('geral')" [class.active]="visaoQuadro === 'geral'">⠿ Visão Geral</button>
         </div>
       </div>
 
-      <div class="operational-filter-bar">
-        <button class="btn-operacional active">Todos</button>
-        <button class="btn-operacional">Editor A</button>
-        <button class="btn-operacional">LIBRAS</button>
-        <button class="btn-operacional">Revisor LP</button>
+      <div class="operacionais-atribuicao-flutuante">
+        <h3>Equipe do Estúdio:</h3>
+        <div class="lista-operacionais">
+          <div *ngFor="let op of listaOperacionais" class="operacional-button" [style.background-color]="op.cor">
+            <div class="nome-op">{{ op.nome.split(' ')[0] }}</div>
+            <small>{{ op.perfil }}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="board-shortcut-bar">
+        <label>Ir para etapa:</label>
+        <select (change)="scrollToColumn($event)">
+          <option value="" disabled selected>Selecione...</option>
+          <option *ngFor="let col of colunasNavegacao" [value]="col.id">{{ col.label }}</option>
+        </select>
       </div>
 
       <div class="board-view-general" *ngIf="visaoQuadro === 'geral'">
-        
         <div class="board-container-scroll" cdkDropListGroup>
 
-          <div class="board-list" id="standby">
-            <div class="board-list-header"><h3>Standby</h3><button class="maximize-btn" (click)="focarLista('standby')">↗</button></div>
-            <div class="cards" cdkDropList [cdkDropListData]="standby" (cdkDropListDropped)="drop($event)">
-              <div *ngFor="let card of standby" class="board-card" cdkDrag>{{ card.titulo }}</div>
+          <ng-template #columnTemplate let-lista="lista" let-id="id" let-titulo="titulo">
+            <div class="board-list" [id]="id">
+              <div class="board-list-header">
+                <h3>{{ titulo }}</h3>
+                <button class="maximize-btn" (click)="focarLista(id)">↗</button>
+              </div>
+              <div class="cards" cdkDropList [cdkDropListData]="lista" [cdkDropListEnterPredicate]="isCardPredicate"
+                (cdkDropListDropped)="drop($event)">
+                <div *ngFor="let card of lista" class="board-card" cdkDrag [cdkDragData]="card">
+                  <div class="card-header-info">
+                    <span class="card-tag" [class.tag-enem]="card.programa === 'enem'"
+                      [class.tag-rieh]="card.programa === 'rieh'">{{ card.programa === 'enem' ? 'Se Liga no Enem' :
+                      'RIEH' }}</span>
+                    <span class="card-id">#{{ card.id }}</span>
+                  </div>
+                  <h4>{{ card.titulo }}</h4>
+                  <div class="card-meta"
+                    style="font-size: 0.8rem; color: #6B7280; margin-bottom: 0.5rem; display:flex; align-items:center; gap:0.3rem;">
+                    <span>📅</span><span *ngIf="card.prazo">{{ card.prazo | date:'dd/MM' }}</span><span
+                      *ngIf="!card.prazo">Sem prazo</span></div>
+                  <div class="card-footer" [style.border-top]="'3px solid ' + getResponsavelCor(card.responsavel)">
+                    <div class="resp-selector-container" style="display:flex; flex-direction:column; width:85%;">
+                      <label class="resp-label">Responsável:</label>
+                      <select class="resp-select" (change)="mudarResponsavel(card, $event)"
+                        (click)="$event.stopPropagation()"
+                        [style.color]="card.responsavel ? getResponsavelCor(card.responsavel) : '#6B7280'"
+                        [style.font-weight]="card.responsavel ? '700' : '400'">
+                        <option value="" [selected]="!card.responsavel">-- Atribuir --</option>
+                        <option *ngFor="let op of listaOperacionais" [value]="op.id"
+                          [selected]="card.responsavel === op.id">{{ op.nome }}</option>
+                      </select>
+                    </div>
+                    <div class="resp-avatar" [style.background-color]="getResponsavelCor(card.responsavel)"
+                      style="width: 14px; height: 14px; border-radius: 50%;"></div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          
-          <div class="board-list" id="para-producao-semanal">
-            <div class="board-list-header"><h3>Para Produção Semanal</h3><button class="maximize-btn" (click)="focarLista('para-producao-semanal')">↗</button></div>
-            <div class="cards" cdkDropList [cdkDropListData]="paraProducaoSemanal" (cdkDropListDropped)="drop($event)">
-              <div *ngFor="let card of paraProducaoSemanal" class="board-card" cdkDrag>{{ card.titulo }}</div>
-            </div>
-          </div>
-          
-          <div class="board-list" id="ao-vivo">
-            <div class="board-list-header"><h3>Ao Vivo</h3><button class="maximize-btn" (click)="focarLista('ao-vivo')">↗</button></div>
-            <div class="cards" cdkDropList [cdkDropListData]="aoVivo" (cdkDropListDropped)="drop($event)">
-              <div *ngFor="let card of aoVivo" class="board-card" cdkDrag>{{ card.titulo }}</div>
-            </div>
-          </div>
+          </ng-template>
 
-          <div class="board-list" id="gravado">
-            <div class="board-list-header"><h3>Gravado</h3><button class="maximize-btn" (click)="focarLista('gravado')">↗</button></div>
-            <div class="cards" cdkDropList [cdkDropListData]="gravado" (cdkDropListDropped)="drop($event)">
-              <div *ngFor="let card of gravado" class="board-card" cdkDrag>{{ card.titulo }}</div>
-            </div>
-          </div>
-          
-          <div class="board-list" id="edicao1">
-            <div class="board-list-header"><h3>Edição 1 (Decupagem)</h3><button class="maximize-btn" (click)="focarLista('edicao1')">↗</button></div>
-            <div class="cards" cdkDropList [cdkDropListData]="edicao1" (cdkDropListDropped)="drop($event)">
-              <div *ngFor="let card of edicao1" class="board-card" cdkDrag>{{ card.titulo }}</div>
-            </div>
-          </div>
-
-          <div class="board-list" id="edicao2">
-            <div class="board-list-header"><h3>Edição 2 (Ilustração)</h3><button class="maximize-btn" (click)="focarLista('edicao2')">↗</button></div>
-            <div class="cards" cdkDropList [cdkDropListData]="edicao2" (cdkDropListDropped)="drop($event)">
-              <div *ngFor="let card of edicao2" class="board-card" cdkDrag>{{ card.titulo }}</div>
-            </div>
-          </div>
-
-          <div class="board-list" id="edicao3">
-            <div class="board-list-header"><h3>Edição 3</h3><button class="maximize-btn" (click)="focarLista('edicao3')">↗</button></div>
-            <div class="cards" cdkDropList [cdkDropListData]="edicao3" (cdkDropListDropped)="drop($event)">
-              <div *ngFor="let card of edicao3" class="board-card" cdkDrag>{{ card.titulo }}</div>
-            </div>
-          </div>
-          
-          <div class="board-list" id="edicao-final">
-            <div class="board-list-header"><h3>Edição Final</h3><button class="maximize-btn" (click)="focarLista('edicao-final')">↗</button></div>
-            <div class="cards" cdkDropList [cdkDropListData]="edicaoFinal" (cdkDropListDropped)="drop($event)">
-              <div *ngFor="let card of edicaoFinal" class="board-card" cdkDrag>{{ card.titulo }}</div>
-            </div>
-          </div>
-
-          <div class="board-list" id="libras">
-            <div class="board-list-header"><h3>Estudo / Gravação Libras</h3><button class="maximize-btn" (click)="focarLista('libras')">↗</button></div>
-            <div class="cards" cdkDropList [cdkDropListData]="libras" (cdkDropListDropped)="drop($event)">
-              <div *ngFor="let card of libras" class="board-card" cdkDrag>{{ card.titulo }}</div>
-            </div>
-          </div>
-
-          <div class="board-list" id="revisao-lp">
-            <div class="board-list-header"><h3>Revisão LP</h3><button class="maximize-btn" (click)="focarLista('revisao-lp')">↗</button></div>
-            <div class="cards" cdkDropList [cdkDropListData]="revisaoLP" (cdkDropListDropped)="drop($event)">
-              <div *ngFor="let card of revisaoLP" class="board-card" cdkDrag>{{ card.titulo }}</div>
-            </div>
-          </div>
-
-          <div class="board-list" id="producao-lse">
-            <div class="board-list-header"><h3>Produção LSE</h3><button class="maximize-btn" (click)="focarLista('producao-lse')">↗</button></div>
-            <div class="cards" cdkDropList [cdkDropListData]="producaoLSE" (cdkDropListDropped)="drop($event)">
-              <div *ngFor="let card of producaoLSE" class="board-card" cdkDrag>{{ card.titulo }}</div>
-            </div>
-          </div>
-          
-          <div class="board-list" id="concluido">
-            <div class="board-list-header"><h3>Concluído</h3><button class="maximize-btn" (click)="focarLista('concluido')">↗</button></div>
-            <div class="cards" cdkDropList [cdkDropListData]="concluido" (cdkDropListDropped)="drop($event)">
-              <div *ngFor="let card of concluido" class="board-card card-finalizado" cdkDrag>{{ card.titulo }}</div>
-            </div>
-          </div>
-
-          <div class="board-list" id="publicado">
-            <div class="board-list-header"><h3>Publicado no Youtube</h3><button class="maximize-btn" (click)="focarLista('publicado')">↗</button></div>
-            <div class="cards" cdkDropList [cdkDropListData]="publicado" (cdkDropListDropped)="drop($event)">
-              <div *ngFor="let card of publicado" class="board-card card-finalizado" cdkDrag>{{ card.titulo }}</div>
-            </div>
-          </div>
-
+          <ng-container
+            *ngTemplateOutlet="columnTemplate; context: { lista: standby, id: 'standby', titulo: 'Standby' }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="columnTemplate; context: { lista: paraProducaoSemanal, id: 'para-producao-semanal', titulo: 'Para Produção Semanal' }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="columnTemplate; context: { lista: aoVivo, id: 'ao-vivo', titulo: 'Ao Vivo' }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="columnTemplate; context: { lista: gravado, id: 'gravado', titulo: 'Gravado' }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="columnTemplate; context: { lista: edicao1, id: 'edicao1', titulo: 'Edição 1 (Decupagem)' }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="columnTemplate; context: { lista: edicao2, id: 'edicao2', titulo: 'Edição 2 (Ilustração)' }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="columnTemplate; context: { lista: edicao3, id: 'edicao3', titulo: 'Edição 3' }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="columnTemplate; context: { lista: edicaoFinal, id: 'edicao-final', titulo: 'Edição Final' }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="columnTemplate; context: { lista: libras, id: 'libras', titulo: 'Estudo / Gravação Libras' }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="columnTemplate; context: { lista: revisaoLP, id: 'revisao-lp', titulo: 'Revisão LP' }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="columnTemplate; context: { lista: producaoLSE, id: 'producao-lse', titulo: 'Produção LSE' }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="columnTemplate; context: { lista: concluido, id: 'concluido', titulo: 'Concluído' }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="columnTemplate; context: { lista: publicado, id: 'publicado', titulo: 'Publicado no Youtube' }"></ng-container>
         </div>
       </div>
 
       <div class="board-view-focused" *ngIf="visaoQuadro === 'focada'">
-        
-        <div class="board-list" *ngIf="listaFocada === 'standby'"><div class="board-list-header"><h3>Standby</h3><button class="maximize-btn" (click)="focarLista('standby')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="standby" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of standby" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
-        <div class="board-list" *ngIf="listaFocada === 'para-producao-semanal'"><div class="board-list-header"><h3>Para Produção Semanal</h3><button class="maximize-btn" (click)="focarLista('para-producao-semanal')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="paraProducaoSemanal" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of paraProducaoSemanal" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
-        <div class="board-list" *ngIf="listaFocada === 'ao-vivo'"><div class="board-list-header"><h3>Ao Vivo</h3><button class="maximize-btn" (click)="focarLista('ao-vivo')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="aoVivo" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of aoVivo" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
-        <div class="board-list" *ngIf="listaFocada === 'gravado'"><div class="board-list-header"><h3>Gravado</h3><button class="maximize-btn" (click)="focarLista('gravado')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="gravado" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of gravado" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
-        <div class="board-list" *ngIf="listaFocada === 'edicao1'"><div class="board-list-header"><h3>Edição 1 (Decupagem)</h3><button class="maximize-btn" (click)="focarLista('edicao1')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="edicao1" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of edicao1" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
-        <div class="board-list" *ngIf="listaFocada === 'edicao2'"><div class="board-list-header"><h3>Edição 2 (Ilustração)</h3><button class="maximize-btn" (click)="focarLista('edicao2')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="edicao2" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of edicao2" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
-        <div class="board-list" *ngIf="listaFocada === 'edicao3'"><div class="board-list-header"><h3>Edição 3</h3><button class="maximize-btn" (click)="focarLista('edicao3')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="edicao3" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of edicao3" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
-        <div class="board-list" *ngIf="listaFocada === 'edicao-final'"><div class="board-list-header"><h3>Edição Final</h3><button class="maximize-btn" (click)="focarLista('edicao-final')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="edicaoFinal" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of edicaoFinal" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
-        <div class="board-list" *ngIf="listaFocada === 'libras'"><div class="board-list-header"><h3>Estudo / Gravação Libras</h3><button class="maximize-btn" (click)="focarLista('libras')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="libras" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of libras" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
-        <div class="board-list" *ngIf="listaFocada === 'revisao-lp'"><div class="board-list-header"><h3>Revisão LP</h3><button class="maximize-btn" (click)="focarLista('revisao-lp')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="revisaoLP" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of revisaoLP" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
-        <div class="board-list" *ngIf="listaFocada === 'producao-lse'"><div class="board-list-header"><h3>Produção LSE</h3><button class="maximize-btn" (click)="focarLista('producao-lse')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="producaoLSE" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of producaoLSE" class="board-card" cdkDrag>{{ card.titulo }}</div></div></div>
-        <div class="board-list" *ngIf="listaFocada === 'concluido'"><div class="board-list-header"><h3>Concluído</h3><button class="maximize-btn" (click)="focarLista('concluido')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="concluido" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of concluido" class="board-card card-finalizado" cdkDrag>{{ card.titulo }}</div></div></div>
-        <div class="board-list" *ngIf="listaFocada === 'publicado'"><div class="board-list-header"><h3>Publicado no Youtube</h3><button class="maximize-btn" (click)="focarLista('publicado')">↙</button></div><div class="cards" cdkDropList [cdkDropListData]="publicado" (cdkDropListDropped)="drop($event)"><div *ngFor="let card of publicado" class="board-card card-finalizado" cdkDrag>{{ card.titulo }}</div></div></div>
-
+        <ng-template #focusedColumnTemplate let-lista="lista" let-id="id" let-titulo="titulo">
+          <div class="board-list" *ngIf="listaFocada === id">
+            <div class="board-list-header">
+              <h3>{{ titulo }}</h3><button class="maximize-btn" (click)="focarLista(id)">↙</button>
+            </div>
+            <div class="cards" cdkDropList [cdkDropListData]="lista" [cdkDropListEnterPredicate]="isCardPredicate"
+              (cdkDropListDropped)="drop($event)">
+              <div *ngFor="let card of lista" class="board-card" cdkDrag [cdkDragData]="card">
+                <div class="card-header-info"><span class="card-tag" [class.tag-enem]="card.programa === 'enem'"
+                    [class.tag-rieh]="card.programa === 'rieh'">{{ card.programa === 'enem' ? 'Se Liga no Enem' : 'RIEH'
+                    }}</span><span class="card-id">#{{ card.id }}</span></div>
+                <h4>{{ card.titulo }}</h4>
+                <div class="card-meta"
+                  style="font-size: 0.8rem; color: #6B7280; margin-bottom: 0.5rem; display:flex; align-items:center; gap:0.3rem;">
+                  <span>📅</span><span *ngIf="card.prazo">{{ card.prazo | date:'dd/MM' }}</span><span
+                    *ngIf="!card.prazo">Sem prazo</span></div>
+                <div class="card-footer" [style.border-top]="'3px solid ' + getResponsavelCor(card.responsavel)">
+                  <div class="resp-selector-container" style="display:flex; flex-direction:column; width:85%;">
+                    <label class="resp-label">Responsável:</label>
+                    <select class="resp-select" (change)="mudarResponsavel(card, $event)"
+                      (click)="$event.stopPropagation()"
+                      [style.color]="card.responsavel ? getResponsavelCor(card.responsavel) : '#6B7280'"
+                      [style.font-weight]="card.responsavel ? '700' : '400'">
+                      <option value="" [selected]="!card.responsavel">-- Atribuir --</option>
+                      <option *ngFor="let op of listaOperacionais" [value]="op.id"
+                        [selected]="card.responsavel === op.id">{{ op.nome }}</option>
+                    </select>
+                  </div>
+                  <div class="resp-avatar" [style.background-color]="getResponsavelCor(card.responsavel)"
+                    style="width: 14px; height: 14px; border-radius: 50%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-container
+          *ngTemplateOutlet="focusedColumnTemplate; context: { lista: standby, id: 'standby', titulo: 'Standby' }"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="focusedColumnTemplate; context: { lista: paraProducaoSemanal, id: 'para-producao-semanal', titulo: 'Para Produção Semanal' }"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="focusedColumnTemplate; context: { lista: aoVivo, id: 'ao-vivo', titulo: 'Ao Vivo' }"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="focusedColumnTemplate; context: { lista: gravado, id: 'gravado', titulo: 'Gravado' }"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="focusedColumnTemplate; context: { lista: edicao1, id: 'edicao1', titulo: 'Edição 1 (Decupagem)' }"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="focusedColumnTemplate; context: { lista: edicao2, id: 'edicao2', titulo: 'Edição 2 (Ilustração)' }"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="focusedColumnTemplate; context: { lista: edicao3, id: 'edicao3', titulo: 'Edição 3' }"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="focusedColumnTemplate; context: { lista: edicaoFinal, id: 'edicao-final', titulo: 'Edição Final' }"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="focusedColumnTemplate; context: { lista: libras, id: 'libras', titulo: 'Estudo / Gravação Libras' }"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="focusedColumnTemplate; context: { lista: revisaoLP, id: 'revisao-lp', titulo: 'Revisão LP' }"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="focusedColumnTemplate; context: { lista: producaoLSE, id: 'producao-lse', titulo: 'Produção LSE' }"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="focusedColumnTemplate; context: { lista: concluido, id: 'concluido', titulo: 'Concluído' }"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="focusedColumnTemplate; context: { lista: publicado, id: 'publicado', titulo: 'Publicado no Youtube' }"></ng-container>
       </div>
-
     </div>
 
     <div class="aba" *ngIf="abaAtual === 'agenda'">
       <h2>Agenda do Estúdio (Calendário)</h2>
-      <p>(Conteúdo da Agenda aqui...)</p>
     </div>
 
+  </div>
+</div>
+
+<div id="create-card-modal" class="modal-overlay" *ngIf="isModalOpen">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Cadastrar Processo</h2><span class="close-btn" (click)="closeModal()">&times;</span>
+    </div>
+    <form (submit)="confirmarCriacaoCard()">
+      <div class="form-row-wide">
+        <div class="form-group" style="margin-bottom: 1.5rem;"><label>Título do Pedido</label><input type="text"
+            [(ngModel)]="novoCardData.titulo" name="titulo" required placeholder="Ex: Aula de Matemática - Funções">
+        </div>
+      </div>
+      <div class="form-row-wide">
+        <div class="form-group"><label>Solicitante</label><input type="text" [(ngModel)]="novoCardData.solicitante"
+            name="solicitante" required placeholder="Ex: Prof. Carlos"></div>
+        <div class="form-group"><label>Tipo de Material</label><select [(ngModel)]="novoCardData.tipo" name="tipo"
+            (change)="atualizarEtapasPadrao()">
+            <option value="videoaula">Videoaula</option>
+            <option value="podcast">Podcast</option>
+            <option value="reels">Reels/Short</option>
+            <option value="live">Live</option>
+          </select></div>
+        <div class="form-group"><label>Programa</label><select [(ngModel)]="novoCardData.programa" name="programa">
+            <option value="enem">Se Liga no Enem</option>
+            <option value="rieh">Outras Produções</option>
+          </select></div>
+      </div>
+      <div class="form-row-wide" style="grid-template-columns: 1fr 1fr 1fr;">
+        <div class="form-group"><label>Prazo de Entrega</label><input type="date" [(ngModel)]="novoCardData.prazo"
+            name="prazo"></div>
+        <div class="form-group"><label>Responsável</label><select [(ngModel)]="novoCardData.responsavel"
+            name="responsavel">
+            <option value="">-- Pendente --</option>
+            <option *ngFor="let op of listaOperacionais" [value]="op.id">{{ op.nome }} ({{ op.perfil }})</option>
+          </select></div>
+        <div class="form-group"><label>Iniciar em</label><select [(ngModel)]="novoCardData.listaId" name="listaId">
+            <option value="standby">Standby</option>
+            <option value="para-producao-semanal">Para Produção Semanal</option>
+            <option value="gravado">Gravado</option>
+          </select></div>
+      </div>
+      <div class="workflow-section"><label class="section-label">Definição das Etapas (Marque o que se aplica)</label>
+        <div class="workflow-grid">
+          <div class="workflow-item" *ngFor="let etapa of etapasWorkflow"><input type="checkbox"
+              [id]="'check-' + etapa.key" [(ngModel)]="etapasSelecionadas[etapa.key]"
+              [name]="'check-' + etapa.key"><label [for]="'check-' + etapa.key">{{ etapa.label }}</label></div>
+        </div>
+      </div>
+      <div class="modal-actions"><button type="button" class="btn-sair" (click)="closeModal()">Cancelar</button><button
+          type="submit" class="btn-novo-card">Confirmar e Criar</button></div>
+    </form>
   </div>
 </div>

@@ -2,23 +2,22 @@
 .gestor-painel {
   max-width: 1200px;
   margin: 40px auto;
-  background-color: #FFFFFF; /* Fundo do Painel Branco */
+  background-color: #FFFFFF;
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
-/* --- ESTILO DO CABEÇALHO (Abas + Sair) --- */
+/* --- CABEÇALHO --- */
 .gestor-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #F9FAFB; /* Fundo cinza claro */
+  background-color: #F9FAFB;
   border-bottom: 2px solid #E5E7EB;
   padding: 0 1.5rem 0 2.5rem;
 }
 
-/* --- ESTILO DA NAVEGAÇÃO POR ABAS --- */
 .gestor-nav {
   display: flex;
   gap: 1.5rem;
@@ -28,7 +27,7 @@
   padding: 1rem 0.5rem;
   font-size: 1rem;
   font-weight: 600;
-  color: #6B7280; /* Cor da aba inativa (cinza) */
+  color: #6B7280;
   text-decoration: none;
   border-bottom: 3px solid transparent;
   margin-bottom: -2px;
@@ -41,11 +40,27 @@
 }
 
 .gestor-nav a.active {
-  color: #4F46E5; /* Cor primária (roxo/azul) */
+  color: #4F46E5;
   border-bottom-color: #4F46E5;
 }
 
-/* --- ESTILO DO BOTÃO SAIR --- */
+.gestor-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-novo-card {
+  background-color: #4F46E5;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
 .btn-sair {
   font-size: 0.9rem;
   font-weight: 600;
@@ -53,7 +68,6 @@
   text-decoration: none;
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  transition: all 0.2s ease;
 }
 
 .btn-sair:hover {
@@ -61,17 +75,13 @@
   color: #111827;
 }
 
-/* --- ESTILO DO CONTEÚDO DAS ABAS --- */
+/* --- CONTEÚDO --- */
 .gestor-conteudo {
   padding: 2.5rem;
 }
 
-
-
-/* --- ESTILO DA SAUDAÇÃO --- */
 .gestor-saudacao {
   margin-top: 2rem;
-  /* Espaço acima */
   margin-bottom: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid #E5E7EB;
@@ -89,17 +99,76 @@
   margin: 0;
 }
 
-/* --- ESTILO DO QUADRO KANBAN (TEMA CLARO - ALTO CONTRASTE) --- */
+/* --- BARRA DE OPERACIONAIS --- */
+.operacionais-atribuicao-flutuante {
+  background-color: #FFFFFF;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  overflow-x: auto;
+}
 
+.operacionais-atribuicao-flutuante h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #374151;
+  font-weight: 700;
+}
+
+.lista-operacionais {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.operacional-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 110px;
+    height: 55px;
+    border-radius: 8px;
+    color: #FFF;
+    font-size: 0.85rem;
+    font-weight: 700;
+    
+    /* ALTERADO: Removemos o cursor: grab */
+    cursor: default; 
+    
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    user-select: none;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Removemos o efeito de :active (agarrar) pois não é mais clicável */
+.operacional-button small {
+    font-size: 0.7rem;
+    font-weight: 500;
+    opacity: 0.9;
+    margin-top: 2px;
+}
+
+.operacional-button.preview {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05) rotate(2deg);
+  z-index: 1000;
+  opacity: 0.9;
+}
+
+/* --- KANBAN --- */
 .quadro-header {
   margin-bottom: 1.5rem;
 }
 
 .board-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .board-controls h2 {
@@ -108,7 +177,6 @@
   margin: 0;
 }
 
-/* Botões de Visão */
 .view-toggle button {
   background-color: #F3F4F6;
   border: 1px solid #D1D5DB;
@@ -126,291 +194,340 @@
   color: #FFFFFF;
 }
 
-
-
-
-/* FUNDO (Cinza mais escuro para contraste) */
 .board-container-scroll {
   display: flex;
   gap: 1rem;
   overflow-x: auto;
   background-color: #E5E7EB;
-  /* <-- FUNDO CINZA MÉDIO */
   padding: 1rem;
   border-radius: 12px;
-  min-height: 400px;
+  min-height: 500px;
 }
 
-/* COLUNAS (Cinza bem claro, quase branco) */
 .board-list {
-  flex: 0 0 280px;
+  flex: 0 0 300px;
   background-color: #F9FAFB;
-  /* <-- FUNDO CINZA BEM CLARO */
   border: 1px solid #D1D5DB;
-  /* Borda mais visível */
   border-radius: 12px;
   padding: 0.75rem;
-  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
 }
 
 .board-list-header {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #6B7280;
-  /* Cor do título (cinza) */
-  padding: 0.5rem 0.25rem 0.75rem 0.25rem;
-  /* Padding inferior */
-  margin-bottom: 0.75rem;
-  border-bottom: 2px solid #E5E7EB;
-  /* Linha divisória */
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #6B7280;
+  padding: 0.5rem 0.25rem 0.75rem 0.25rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid #E5E7EB;
 }
 
-/* Garante que a coluna vazia tenha altura */
+/* IMPORTANTE: Garante altura para drop em lista vazia */
 .board-list .cards {
-  min-height: 50px;
+  min-height: 100px;
+  flex-grow: 1;
+  padding-bottom: 2rem;
 }
 
-/* CARDS (Brancos com sombra) */
 .board-card {
   background-color: #FFFFFF;
-  /* <-- FUNDO BRANCO PURO */
   border: 1px solid #E5E7EB;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
   padding: 1rem;
   margin-bottom: 0.75rem;
   cursor: grab;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Feedback visual ao arrastar sobre o card */
+.board-card.cdk-drop-list-receiving {
+  border: 2px solid #4F46E5;
+  background-color: #EEF2FF;
+  transform: scale(1.02);
+  z-index: 10;
+}
+
+.card-header-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.card-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  background-color: #E5E7EB;
+  color: #374151;
+}
+
+.card-tag.tag-enem {
+  background-color: #DBEAFE;
+  color: #1E40AF;
+}
+
+.card-tag.tag-rieh {
+  background-color: #D1FAE5;
+  color: #065F46;
+}
+
+.card-id {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+  font-weight: 500;
+}
+
+.board-card h4 {
+  margin: 0;
+  font-size: 0.95rem;
   color: #111827;
-  /* Texto preto */
+  line-height: 1.4;
 }
 
-.board-card:active {
-  cursor: grabbing;
+.card-footer {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #F3F4F6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0 0 4px 4px;
 }
 
-/* Sinal Visual para Card Finalizado (Verde) */
-.card-finalizado {
-  border-left: 4px solid #10B981;
-  /* Borda verde de "Concluído" */
-  background-color: #F0FDF4;
-  /* Fundo verde bem claro */
+.resp-label {
+  font-size: 0.65rem;
+  color: #9CA3AF;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
-.card-finalizado,
-.card-finalizado h4 {
-  text-decoration: line-through;
-  color: #6B7280;
-  /* Cinza */
+.resp-nome {
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
-/* --- NOVO: Estilo do Botão Maximizar (↗) --- */
+.resp-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 0 0 1px #E5E7EB;
+}
+
 .maximize-btn {
-  background-color: transparent;
+  background: transparent;
   border: none;
   color: #9CA3AF;
-  /* Cinza */
-  font-size: 1.5rem;
-  /* Tamanho do ícone (seta) */
-  line-height: 1;
-  padding: 0 0.25rem;
-  border-radius: 4px;
+  font-size: 1.2rem;
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
-.maximize-btn:hover {
-  background-color: #E5E7EB;
-  /* Cinza claro no hover */
-  color: #111827;
-}
-
-/* --- NOVO: Estilo da Coluna Maximizada --- */
-/* Na Visão Focada, a coluna ocupa 100% da largura */
 .board-view-focused .board-list {
   flex-basis: 100%;
-  /* Ocupa a largura total */
   max-width: 100%;
-  margin: 0 auto; /* Centraliza na visão focada */
+  margin: 0 auto;
 }
 
-/* --- ADICIONAIS DO DASHBOARD (Que virão do protótipo) --- */
-
-.kpi-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
-}
-.kpi-group h3 {
-    margin-top: 0;
-    border-bottom: 1px solid #E5E7EB;
-    padding-bottom: 0.5rem;
-    color: #111827;
-}
-.kpi-grid-small {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-}
-.kpi-card {
-    background-color: #F9FAFB; /* Fundo leve */
-    padding: 1.5rem;
-    border-radius: 8px;
-    border: 1px solid #D1D5DB;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-.kpi-card .value {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #4F46E5; /* Cor primária */
-}
-.kpi-card .title {
-    font-size: 0.9rem;
-    color: #6B7280;
-    text-transform: uppercase;
+/* --- MODAL --- */
+.modal-overlay {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(3px);
 }
 
-.charts-section { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
-    gap: 2rem; 
-    margin-bottom: 3rem; 
-}
-.chart-container { 
-    background-color: #FFFFFF; 
-    border-radius: 8px; 
-    border: 1px solid #E5E7EB; 
-    padding: 1.5rem; 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-.chart-title { 
-    margin: 0 0 1.5rem 0;
-    color: #111827;
+.modal-content {
+  background-color: #FFFFFF;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 900px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-height: 95vh;
+  overflow-y: auto;
 }
 
-.data-table { 
-    width: 100%; 
-    border-collapse: collapse; 
-    margin-top: 1rem; 
-    font-size: 0.95rem;
-}
-.data-table th, .data-table td { 
-    padding: 1rem; 
-    text-align: left; 
-    border-bottom: 1px solid #E5E7EB; 
-}
-.data-table th {
-    background-color: #F9FAFB;
-    color: #6B7280;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-.data-table td {
-    color: #374151;
-}
-.data-table a { 
-    color: #4F46E5; 
-    text-decoration: none; 
-}
-.data-table a:hover {
-    text-decoration: underline;
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #E5E7EB;
+  padding-bottom: 1rem;
 }
 
-/* Estilos de gráficos e legenda (simplificados para HTML/CSS) */
-.pie-chart {
-    /* No Angular usaremos uma biblioteca, mas o espaço está reservado */
-    width: 180px; 
-    height: 180px; 
-    border-radius: 50%;
-    background-color: #E5E7EB;
+.form-row-wide {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
-.pie-chart-wrapper {
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    gap: 2rem; 
-    height: 250px; 
-}
-.chart-legend { 
-    list-style: none; 
-    padding: 0; 
-    margin: 0; 
-}
-.chart-legend li { 
-    margin-bottom: 0.75rem; 
-    display: flex; 
-    align-items: center; 
-    color: #374151;
-}
-.legend-color { 
-    width: 16px; 
-    height: 16px; 
-    border-radius: 4px; 
-    margin-right: 0.75rem; 
-    border: 1px solid #D1D5DB;
-}
-/* --- BOTÕES ARRASTÁVEIS DE OPERACIONAIS (PASSO 7) --- */
 
-operacionais-atribuicao-flutuante {
-    /* Corrigido para ficar dentro do fluxo normal da aba, como um painel de controle */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  color: #374151;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 0.75rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background-color: #F9FAFB;
+}
+
+.workflow-section {
+  background-color: #F3F4F6;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  margin-bottom: 1.5rem;
+}
+
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.workflow-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #FFF;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #E5E7EB;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #E5E7EB;
+}
+/* --- ESTILO DO NOVO SELECT NO CARD --- */
+.card-footer {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem; /* Padding ajustado */
+    border-top: 3px solid #F3F4F6; /* Borda padrão */
+    background-color: #F9FAFB; 
+    border-radius: 0 0 8px 8px;
     display: flex;
-    align-items: center; /* Centraliza verticalmente o título e os botões */
-    gap: 1rem; 
-    padding: 1rem 0;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid #E5E7EB;
-    overflow-x: auto; 
-    background-color: #FFFFFF; /* Garante que o fundo seja claro */
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.3s ease;
 }
 
-.operacionais-atribuicao-flutuante h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 700;
-}
-.operacional-button {
-    flex-shrink: 0; /* Impede que os botões diminuam */
-    width: 120px;
-    height: 50px;
-    border-radius: 8px;
-    padding: 0.5rem;
-    color: #FFF; /* Texto branco sobre fundo colorido */
-    text-align: center;
-    cursor: grab;
-    transition: box-shadow 0.2s ease;
-    
+.resp-selector-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    width: 85%; /* Ocupa a maior parte do espaço */
+}
+
+.resp-label {
+    font-size: 0.65rem;
+    color: #9CA3AF;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.resp-select {
+    appearance: none; /* Remove o estilo padrão do navegador */
+    -webkit-appearance: none;
+    border: 1px solid transparent; /* Sem borda visível por padrão */
+    background-color: transparent;
+    font-size: 0.85rem;
+    width: 100%;
+    padding: 2px 0;
+    cursor: pointer;
+    transition: all 0.2s;
+    
+    /* Adiciona uma setinha discreta */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236B7280%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0 top 50%;
+    background-size: 0.65rem auto;
+    padding-right: 1rem; /* Espaço para a setinha */
+}
+
+.resp-select:hover {
+    background-color: #E5E7EB;
+    border-radius: 4px;
+    padding-left: 4px; /* Pequeno shift visual */
+}
+
+.resp-select:focus {
+    outline: none;
+    border-color: #4F46E5;
+    background-color: #FFF;
+    border-radius: 4px;
+}
+/* --- BARRA DE NAVEGAÇÃO RÁPIDA (Menu de Salto) --- */
+.board-shortcut-bar {
+    display: flex;
     align-items: center;
+    gap: 0.5rem;
+    background-color: #F3F4F6;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #E5E7EB;
+    width: fit-content;
+
+    /* CORREÇÃO DE ESPAÇAMENTO */
+    margin-top: 1rem;      /* Separa um pouco da equipe acima */
+    margin-bottom: 2rem;   /* Separa BASTANTE do quadro cinza abaixo */
+}
+
+.board-shortcut-bar label {
     font-size: 0.8rem;
-    font-weight: 500;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+    color: #6B7280;
+    white-space: nowrap;
 }
 
-.operacional-button:active {
-    cursor: grabbing;
-}
-
-.operacional-button .nome-op {
-    font-weight: 700;
+.board-shortcut-bar select {
+    background: transparent;
+    border: none;
     font-size: 0.9rem;
-    line-height: 1;
+    color: #374151;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    padding-right: 2rem; /* Espaço para setinha padrão */
 }
 
-.operacional-button small {
-    display: block;
-    margin-top: 2px;
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-/* O ghost do Angular CDK durante o arrastar */
-.cdk-drag-placeholder {
-    opacity: 0.5;
-    background-color: #F0FDF4; /* Cor suave para o placeholder */
-    border: 2px dashed #10B981;
+.board-shortcut-bar select:hover {
+    color: #4F46E5;
 }
