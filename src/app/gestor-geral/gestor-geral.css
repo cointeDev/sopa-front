@@ -87,9 +87,7 @@
 }
 
 
-.aba {
-  display: none;
-}
+
 /* Garante que a aba ativa seja exibida */
 div[ng-reflect-ng-if="true"] {
   display: block;

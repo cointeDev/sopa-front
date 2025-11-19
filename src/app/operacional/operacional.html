@@ -19,14 +19,15 @@
 
     <div class="aba" *ngIf="abaAtual === 'tarefas'">
       <h2>Minhas Tarefas (A Fazer)</h2>
-    </div>
+      </div>
 
     <div class="aba" *ngIf="abaAtual === 'quadro'">
       <h2>Quadro de Produção (Visão Limitada)</h2>
-    </div>
+      </div>
 
     <div class="aba" *ngIf="abaAtual === 'agenda'">
       <h2>Agenda do Estúdio (Calendário)</h2>
+      <app-agenda scope="local" studioId="mossoro"></app-agenda>
     </div>
 
   </div>

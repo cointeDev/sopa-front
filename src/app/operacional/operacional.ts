@@ -2,11 +2,12 @@
 import { Component, OnInit } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router'; 
+import { Agenda } from '../agenda/agenda'; // <-- ADIÇÃO: Importa o componente Agenda
 
 @Component({
   selector: 'app-operacional',
   standalone: true,
-  imports: [CommonModule, RouterLink], 
+  imports: [CommonModule, RouterLink, Agenda], // <-- CORREÇÃO: Adiciona Agenda aqui
   templateUrl: './operacional.html',
   styleUrl: './operacional.css'
 })

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { CdkDrag, CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormsModule } from '@angular/forms';
+import { Agenda } from '../agenda/agenda'; // <-- 1. IMPORTE O COMPONENTE AGENDA AQUI
 
 // --- DEFINIÇÕES GLOBAIS ---
 export interface Operacional {
@@ -29,7 +30,7 @@ export interface Card {
 @Component({
     selector: 'app-gestor',
     standalone: true,
-    imports: [CommonModule, RouterLink, DragDropModule, FormsModule],
+    imports: [CommonModule, RouterLink, DragDropModule, FormsModule, Agenda], // <-- 2. ADICIONE AGENDA NO ARRAY IMPORTS
     templateUrl: './gestor.html',
     styleUrl: './gestor.css'
 })
