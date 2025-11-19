@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core'; 
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, Router } from '@angular/router'; 
-import { CdkDrag, CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop'; 
-import { FormsModule } from '@angular/forms'; 
+import { RouterLink, Router } from '@angular/router';
+import { CdkDrag, CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { FormsModule } from '@angular/forms';
 
 // --- DEFINIÇÕES GLOBAIS ---
 export interface Operacional {
@@ -19,6 +19,7 @@ export const operacionalMap: { [key: string]: Operacional } = {
     'livre': { id: 'livre', nome: 'Livre', cor: 'transparent', perfil: 'N/A' } 
 };
 export type ResponsavelId = string;
+
 export interface Card {
     id: number; titulo: string; disciplina: string; solicitante: string; tipo: string;        
     programa: 'enem' | 'rieh'; responsavel: ResponsavelId | null; prazo?: string;      
@@ -28,72 +29,123 @@ export interface Card {
 @Component({
     selector: 'app-gestor',
     standalone: true,
-    imports: [CommonModule, RouterLink, DragDropModule, FormsModule], 
+    imports: [CommonModule, RouterLink, DragDropModule, FormsModule],
     templateUrl: './gestor.html',
     styleUrl: './gestor.css'
 })
-export class GestorComponent implements OnInit { 
+export class GestorComponent implements OnInit {
+
     public abaAtual: string = 'quadro';
     public visaoQuadro: string = 'geral'; 
-    public listaFocada: string | null = null;
     public greeting: string = ''; 
     public userName: string = 'Alana'; 
     public readonly operacionalMap = operacionalMap; 
-    public listaOperacionais: Operacional[] = [
-        operacionalMap['alana'], operacionalMap['rocheto'], operacionalMap['gabriel'],
-        operacionalMap['caio'], operacionalMap['joao_paulo'], operacionalMap['isa'],
-        operacionalMap['maiara']
+
+    // --- DADOS PARA O COMPARADOR ---
+    public listasComparacao: string[] = []; 
+
+    public colunasDisponiveis = [
+        { id: 'standby', label: 'Standby' }, { id: 'para-producao-semanal', label: 'Produção Semanal' },
+        { id: 'ao-vivo', label: 'Ao Vivo' }, { id: 'gravado', label: 'Gravado' },
+        { id: 'edicao1', label: 'Edição 1' }, { id: 'edicao2', label: 'Edição 2' }, { id: 'edicao3', label: 'Edição 3' }, { id: 'edicao-final', label: 'Edição Final' },
+        { id: 'libras', label: 'Libras' }, { id: 'revisao-lp', label: 'Revisão LP' }, { id: 'producao-lse', label: 'Produção LSE' },
+        { id: 'concluido', label: 'Concluído' }, { id: 'publicado', label: 'Publicado' }
     ];
+    
+    public colunasNavegacao = this.colunasDisponiveis;
+
+    public listaOperacionais: Operacional[] = Object.values(operacionalMap).filter(op => op.id !== 'livre');
+    public operacionaisArrastaveis: ResponsavelId[] = this.listaOperacionais.map(op => op.id);
+
     columnResponsavelMap: { [key: string]: ResponsavelId | null } = { 'edicao1': 'rocheto', 'libras': 'isa', 'gravado': 'alana' };
     public isModalOpen: boolean = false;
-    public novoCardData = {
-        titulo: '', solicitante: '', disciplina: 'História', tipo: 'videoaula', programa: 'enem', prazo: '', listaId: 'standby', responsavel: '' 
-    };
-    public etapasWorkflow = [{ key: 'gravado', label: 'Gravação' }, { key: 'edicao1', label: 'Edição 1 (Decupagem)' }, { key: 'edicao2', label: 'Edição 2 (Ilustração)' }, { key: 'edicao3', label: 'Edição 3' }, { key: 'edicao-final', label: 'Edição Final' }, { key: 'libras', label: 'Libras' }, { key: 'revisao-lp', label: 'Revisão LP' }, { key: 'producao-lse', label: 'Produção LSE' }];
+    public novoCardData = { titulo: '', solicitante: '', disciplina: 'História', tipo: 'videoaula', programa: 'enem', prazo: '', listaId: 'standby', responsavel: '' };
+    public etapasWorkflow = [ { key: 'gravado', label: 'Gravação' }, { key: 'edicao1', label: 'Edição 1 (Decupagem)' }, { key: 'edicao2', label: 'Edição 2 (Ilustração)' }, { key: 'edicao3', label: 'Edição 3' }, { key: 'edicao-final', label: 'Edição Final' }, { key: 'libras', label: 'Libras' }, { key: 'revisao-lp', label: 'Revisão LP' }, { key: 'producao-lse', label: 'Produção LSE' } ];
     public etapasSelecionadas: { [key: string]: boolean } = {};
     private nextCardId: number = 100;
 
-    // Arrays
+    // Listas Kanban
     standby: Card[] = []; paraProducaoSemanal: Card[] = []; aoVivo: Card[] = []; gravado: Card[] = [];
     edicao1: Card[] = []; edicao2: Card[] = []; edicao3: Card[] = []; edicaoFinal: Card[] = [];
-    libras: Card[] = []; revisaoLP: Card[] = []; producaoLSE: Card[] = []; concluido: Card[] = []; publicado: Card[] = [];
+    libras: Card[] = []; revisaoLP: Card[] = []; producaoLSE: Card[] = [];
+    concluido: Card[] = []; publicado: Card[] = [];
 
     public listMap: { [key: string]: Card[] } = {};
-    public listIds: string[] = ['standby', 'para-producao-semanal', 'ao-vivo', 'gravado', 'edicao1', 'edicao2', 'edicao3', 'edicao-final', 'libras', 'revisao-lp', 'producao-lse', 'concluido', 'publicado'];
-    public operacionaisArrastaveis: ResponsavelId[] = this.listaOperacionais.map(op => op.id);
-
-    // --- CORREÇÃO DOS IDs NO MENU ---
-    public colunasNavegacao = [
-        { id: 'standby', label: 'Standby' },
-        { id: 'para-producao-semanal', label: 'Produção Semanal' },
-        { id: 'ao-vivo', label: 'Ao Vivo' },
-        { id: 'gravado', label: 'Gravado' },
-        { id: 'edicao1', label: 'Decupagem' },
-        { id: 'edicao2', label: 'Ilustração' },
-        { id: 'libras', label: 'Libras' },
-        { id: 'edicao-final', label: 'Edição Final' },
-        { id: 'concluido', label: 'Concluído' }
-    ];
 
     constructor(private router: Router) { }
 
     ngOnInit(): void {
         this.setGreeting();
         this.inicializarListas();
-        this.atualizarEtapasPadrao(); 
+        this.atualizarEtapasPadrao();
     }
 
     private inicializarListas() {
-        this.listMap = { 'standby': this.standby, 'para-producao-semanal': this.paraProducaoSemanal, 'ao-vivo': this.aoVivo, 'gravado': this.gravado, 'edicao1': this.edicao1, 'edicao2': this.edicao2, 'edicao3': this.edicao3, 'edicao-final': this.edicaoFinal, 'libras': this.libras, 'revisao-lp': this.revisaoLP, 'producao-lse': this.producaoLSE, 'concluido': this.concluido, 'publicado': this.publicado };
+        this.listMap = {
+            'standby': this.standby, 'para-producao-semanal': this.paraProducaoSemanal, 'ao-vivo': this.aoVivo, 
+            'gravado': this.gravado, 'edicao1': this.edicao1, 'edicao2': this.edicao2, 'edicao3': this.edicao3, 
+            'edicao-final': this.edicaoFinal, 'libras': this.libras, 'revisao-lp': this.revisaoLP, 
+            'producao-lse': this.producaoLSE, 'concluido': this.concluido, 'publicado': this.publicado
+        };
         this.createAndPushCard('Pauta Podcast RIEH', 'Coordenação', 'Geral', 'podcast', 'rieh', '2025-11-25', 'para-producao-semanal');
         this.createAndPushCard('Live de Atualidades', 'Prof. Silva', 'Atualidades', 'live', 'enem', '2025-11-20', 'ao-vivo', 'alana');
     }
+    
     private createAndPushCard(titulo: string, solicitante: string, disciplina: string, tipo: string, programa: 'enem'|'rieh', prazo: string, listaId: string, responsavel: ResponsavelId | null = null) {
-        const novoCard: Card = { id: this.nextCardId++, titulo, disciplina, solicitante, tipo, programa, prazo, responsavel, statusVisual: responsavel ? 'alocado' : 'pendente', etapasAtivas: { ...this.etapasSelecionadas } };
-        if (this.listMap[listaId]) this.listMap[listaId].push(novoCard);
+        const novoCard: Card = {
+            id: this.nextCardId++, titulo, disciplina, solicitante, tipo, programa, prazo, responsavel,
+            statusVisual: responsavel ? 'alocado' : 'pendente',
+            etapasAtivas: { ...this.etapasSelecionadas } 
+        };
+        if (this.listMap[listaId]) {
+            this.listMap[listaId].push(novoCard);
+        }
     }
 
-    // --- FUNÇÃO DE SCROLL ---
+    // --- FUNÇÃO AUXILIAR CORRIGIDA (TS2339) ---
+    public getTituloColuna(colunaId: string): string {
+        const coluna = this.colunasDisponiveis.find(c => c.id === colunaId);
+        return coluna ? coluna.label : colunaId;
+    }
+
+    // --- LÓGICA DE VISÃO E COMPARAÇÃO ---
+    mudarVisao(novaVisao: string) {
+        this.visaoQuadro = novaVisao;
+    }
+
+    // Botão Expandir (na Visão Geral) -> Adiciona a Lista ao Comparador
+    focarLista(listaId: string) {
+        this.adicionarLista(listaId);
+    }
+    
+    // Adicionar/Substituir Lista (Chamado pelo Clique)
+    adicionarLista(listaId: string) {
+        this.mudarVisao('focada');
+        if (!this.listasComparacao.includes(listaId)) {
+            // Se já tem 2, remove o mais antigo (index 0) e adiciona o novo.
+            if (this.listasComparacao.length >= 2) {
+                this.listasComparacao.shift(); // Remove o primeiro (mais antigo)
+            }
+            this.listasComparacao.push(listaId);
+        }
+    }
+
+    // Botão Fechar (no Comparador) -> Remove da comparação
+    fecharListaFocada(listaId: string) {
+        this.listasComparacao = this.listasComparacao.filter(id => id !== listaId);
+        if (this.listasComparacao.length === 0) this.mudarVisao('geral');
+    }
+
+    // Drop da Etiqueta de Coluna (Se tentarmos arrastar)
+    dropColuna(event: CdkDragDrop<string[]>) {
+        if (event.previousContainer !== event.container) {
+            this.adicionarLista(event.item.data); // Usa a lógica de clique/adição
+        } else {
+            moveItemInArray(this.listasComparacao, event.previousIndex, event.currentIndex);
+        }
+    }
+
+    // Scroll Suave do Menu de Salto
     scrollToColumn(event: any) {
         const elementId = event.target.value;
         if (elementId) {
@@ -103,25 +155,31 @@ export class GestorComponent implements OnInit {
         event.target.value = '';
     }
 
-    // --- OUTRAS FUNÇÕES MANTIDAS IGUAIS ---
-    atualizarEtapasPadrao() { const tipo = this.novoCardData.tipo; this.etapasWorkflow.forEach(e => this.etapasSelecionadas[e.key] = true); if (tipo === 'podcast') { this.etapasSelecionadas['libras'] = false; this.etapasSelecionadas['producao-lse'] = false; this.etapasSelecionadas['edicao2'] = false; } else if (tipo === 'reels') { this.etapasSelecionadas['libras'] = false; } }
-    confirmarCriacaoCard() { const resp = this.novoCardData.responsavel === '' ? null : this.novoCardData.responsavel; this.createAndPushCard(this.novoCardData.titulo, this.novoCardData.solicitante, this.novoCardData.disciplina, this.novoCardData.tipo, this.novoCardData.programa as 'enem'|'rieh', this.novoCardData.prazo, this.novoCardData.listaId, resp); this.closeModal(); }
-    mudarResponsavel(card: Card, event: any) { const novoId = event.target.value; if (novoId && this.operacionalMap[novoId as string]) { card.responsavel = novoId; card.statusVisual = 'alocado'; } else { card.responsavel = null; card.statusVisual = 'pendente'; } }
+    // --- OUTRAS FUNÇÕES ---
+    mudarResponsavel(card: Card, event: any) {
+        const novoId = event.target.value;
+        if (novoId && this.operacionalMap[novoId as string]) { card.responsavel = novoId; card.statusVisual = 'alocado'; } 
+        else { card.responsavel = null; card.statusVisual = 'pendente'; }
+    }
+    confirmarCriacaoCard() {
+        const resp = this.novoCardData.responsavel === '' ? null : this.novoCardData.responsavel;
+        this.createAndPushCard(this.novoCardData.titulo, this.novoCardData.solicitante, this.novoCardData.disciplina, this.novoCardData.tipo, this.novoCardData.programa as 'enem'|'rieh', this.novoCardData.prazo, this.novoCardData.listaId, resp);
+        this.closeModal();
+    }
     public setGreeting(): void { const h = new Date().getHours(); this.greeting = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite'; }
     mudarAba(n: string) { this.abaAtual = n; }
-    mudarVisao(n: string) { this.visaoQuadro = n; if(n==='geral') this.listaFocada=null; else if(n==='focada' && !this.listaFocada) this.listaFocada='ao-vivo'; }
-    focarLista(l: string) { this.listaFocada = (this.listaFocada === l) ? null : l; this.mudarVisao(this.listaFocada ? 'focada' : 'geral'); }
     openModal() { this.isModalOpen = true; this.atualizarEtapasPadrao(); }
     closeModal() { this.isModalOpen = false; this.resetModalForm(); }
     resetModalForm() { this.novoCardData = { titulo: '', solicitante: '', disciplina: 'História', tipo: 'videoaula', programa: 'enem', prazo: '', listaId: 'standby', responsavel: '' }; }
+    atualizarEtapasPadrao() { const tipo = this.novoCardData.tipo; this.etapasWorkflow.forEach(e => this.etapasSelecionadas[e.key] = true); if (tipo === 'podcast') { this.etapasSelecionadas['libras'] = false; this.etapasSelecionadas['producao-lse'] = false; this.etapasSelecionadas['edicao2'] = false; } else if (tipo === 'reels') { this.etapasSelecionadas['libras'] = false; } }
     public getResponsavelNome(id: ResponsavelId | null): string { if (!id) return 'Não Atribuído'; return this.operacionalMap[id]?.nome.split(' ')[0] || 'Desconhecido'; }
     public getResponsavelCor(id: ResponsavelId | null): string { if (!id) return '#E5E7EB'; return this.operacionalMap[id]?.cor; }
-    public getResponsavelIdDaColuna(colunaId: string): ResponsavelId | null { return this.columnResponsavelMap[colunaId] || null; }
     public getOperacionalData(id: any): { nome: string; cor: string; perfil: string } { const key = id as string; if (this.operacionalMap[key]) return this.operacionalMap[key]; return { nome: 'Desconhecido', cor: '#ccc', perfil: 'N/A' }; }
-    dropOperacional(event: any) {} 
-    isCardPredicate = (drag: CdkDrag<any>) => typeof drag.data !== 'string';
-    noReturnPredicate = (drag: CdkDrag<any>) => false;
     
+    dropOperacional(event: any) {} 
+    isCardPredicate = (drag: CdkDrag<any>) => typeof drag.data !== 'string'; 
+    noReturnPredicate = (drag: CdkDrag<any>) => false;
+
     drop(event: CdkDragDrop<Card[]>) {
         if (typeof event.item.data !== 'string') {
             if (event.previousContainer === event.container) {
