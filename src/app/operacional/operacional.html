@@ -1,0 +1,35 @@
+<div class="operacional-painel">
+
+  <header class="operacional-header">
+    <nav class="operacional-nav">
+
+      <a (click)="mudarAba('tarefas')" [class.active]="abaAtual === 'tarefas'">  Painel de Tarefas </a>
+      <a (click)="mudarAba('quadro')" [class.active]="abaAtual === 'quadro'"> Quadro de Produção   </a>
+      <a (click)="mudarAba('agenda')" [class.active]="abaAtual === 'agenda'"> Agenda do Estúdio    </a>
+    </nav>
+    <a routerLink="/" class="btn-sair">Sair</a>
+  </header>
+
+  <div class="operacional-conteudo">
+
+    <div class="operacional-saudacao">
+      <h2>{{ greeting }}, {{ userName }}!</h2>
+      <p>Estas são as tarefas atribuídas a você.</p>
+    </div>
+
+    <div class="aba" *ngIf="abaAtual === 'tarefas'">
+      <h2>Minhas Tarefas (A Fazer)</h2>
+      </div>
+
+    <div class="aba" *ngIf="abaAtual === 'quadro'">
+      <h2>Quadro de Produção (Visão Limitada)</h2>
+      </div>
+
+    <div class="aba" *ngIf="abaAtual === 'agenda'">
+      <h2>Agenda do Estúdio (Calendário)</h2>
+      <app-agenda scope="local" studioId="mossoro"></app-agenda>
+    </div>
+
+  </div>
+
+</div>

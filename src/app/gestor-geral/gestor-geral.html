@@ -1,0 +1,38 @@
+<div class="gestor-geral-painel">
+
+  <header class="gestor-geral-header">
+    <nav class="gestor-geral-nav">
+      <a (click)="mudarAba('visao-geral')" 
+         [class.active]="abaAtual === 'visao-geral'">
+        Visão Geral (BI)
+      </a>
+      
+      <a (click)="mudarAba('agenda-global')" 
+         [class.active]="abaAtual === 'agenda-global'">
+        Agenda de Todos os Estúdios
+      </a>
+    </nav>
+
+    <a routerLink="/" class="btn-sair">Sair</a>
+  </header>
+
+  <div class="gestor-geral-conteudo">
+
+    <div class="gestor-geral-saudacao">
+      <h2>{{ greeting }}, {{ userName }}!</h2>
+      <p>Aqui está o resumo macro de todos os estúdios.</p>
+    </div>
+
+    <div class="aba" *ngIf="abaAtual === 'visao-geral'">
+      <h2>BI Consolidado</h2>
+      <p>(Conteúdo dos gráficos de BI com dados TOTAIS aqui...)</p>
+      </div>
+
+    <div class="aba" *ngIf="abaAtual === 'agenda-global'">
+      <h2>Agenda de Todos os Estúdios (Visão de Recursos)</h2>
+      <app-agenda scope="global"></app-agenda>
+    </div>
+
+  </div>
+
+</div>

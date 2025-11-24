@@ -1,0 +1,94 @@
+<div class="status-container">
+
+  <div class="visao-feedback" *ngIf="isTracking">
+    <header class="feedback-header">
+      <div>
+        <h2>Vídeo Aula de Cálculo</h2>
+        <span class="status-tag em-andamento">EM ANDAMENTO</span>
+      </div>
+      <a routerLink="/" class="link-voltar">&larr; Voltar ao Início</a>
+    </header>
+
+    <div class="progresso-stepper">
+      <div class="step ativo"><span>1</span><label>Recebido</label></div>
+      <div class="step-line"></div>
+      <div class="step ativo"><span>2</span><label>Gravação</label></div>
+      <div class="step-line"></div>
+      <div class="step"><span>3</span><label>Edição</label></div>
+      <div class="step-line"></div>
+      <div class="step"><span>4</span><label>Libras</label></div>
+      <div class="step-line"></div>
+      <div class="step"><span>5</span><label>Finalizado</label></div>
+    </div>
+
+    <div class="historico-atividades">
+      <h3>Histórico de Atividades</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <strong>Material em decupagem (11/11/2025)</strong>
+            <p>A equipe de LIBRAS iniciou a decupagem do roteiro.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <strong>Material em edição (10/11/2025)</strong>
+            <p>O editor X iniciou a montagem do primeiro corte.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="visao-correcao" *ngIf="isReturnedForCorrection">
+    <header class="feedback-header">
+      <h2>Correção Necessária no seu Pedido</h2>
+      <a routerLink="/" class="link-voltar">&larr; Voltar ao Início</a>
+    </header>
+
+    <div class="card-mensagem">
+      <p>Olá, [Nome do Solicitante],</p>
+      <p>Avaliamos os materiais enviados para o seu pedido "[Nome do Projeto]" e está tudo quase pronto para iniciarmos.</p>
+      <p>No entanto, identificamos alguns pontos que precisam da sua correção antes que possamos aceitar e planejar a gravação:</p>
+      
+      <div class="mensagem-gestor">
+        <strong>Itens Pendentes:</strong>
+        <p>1. Resumo: O resumo está ótimo, mas notamos que a "Mensagem Principal" conforme descrita no roteiro não está clara.</p>
+        <p>2. Thumbnail: A thumbnail enviada está no formato 1920x1920. Para o canal do YouTube, precisamos que ela esteja no formato 1920x1080 (horizontal).</p>
+      </div>
+
+      <form class="correcao-form">
+        <label for="correcao-texto">Sua mensagem de retorno:</label>
+        <textarea id="correcao-texto" placeholder="Digite sua mensagem para o gestor..."></textarea>
+        
+        <label for="correcao-anexo">Anexar arquivos corrigidos:</label>
+        <input type="file" id="correcao-anexo">
+
+        <div class="botoes-correcao">
+          <button type="button" class="btn-secundario">Criar arquivo</button>
+          <button type="submit" class="btn-primario" (click)="enviarCorrecao()">Enviar mensagem</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="visao-negacao" *ngIf="isRejected">
+    <header class="feedback-header">
+      <h2>Aviso sobre o Pedido "[Nome do Pedido]"</h2>
+      <a routerLink="/" class="link-voltar">&larr; Voltar ao Início</a>
+    </header>
+
+    <div class="card-mensagem">
+      <p>Prezado(a) [Nome do Solicitante],</p>
+      <p>Agradecemos o envio do seu pedido "[Nome do Projeto]".</p>
+      <p>Após uma avaliação interna da nossa equipe de produção e da agenda de estúdios, informamos que, infelizmente, não poderemos prosseguir com o atendimento desta solicitação no momento.</p>
+      
+      <div class="mensagem-gestor">
+        <p>Nossa agenda de gravações e a capacidade da equipe de edição já estão totalmente alocadas para as próximas três semanas, coincidindo com o evento "Se Liga no Enem". No momento, não temos disponibilidade para absorver este novo projeto sem comprometer a qualidade ou os prazos dos processos já em andamento.</p>
+      </div>
+    </div>
+  </div>
+
+</div>

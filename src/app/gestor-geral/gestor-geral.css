@@ -1,0 +1,94 @@
+/* --- ESTILO DO PAINEL GERAL --- */
+.gestor-geral-painel {
+  max-width: 1200px; /* O painel pode ser largo */
+  margin: 40px auto;
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  overflow: hidden; 
+}
+
+/* --- ESTILO DO CABEÇALHO (Abas + Sair) --- */
+.gestor-geral-header {
+  display: flex;
+  justify-content: space-between; /* Abas na esquerda, Sair na direita */
+  align-items: center;
+  background-color: #F9FAFB; /* Fundo cinza claro */
+  border-bottom: 2px solid #E5E7EB; /* Linha divisória */
+  padding: 0 1.5rem 0 2.5rem; 
+}
+
+/* --- ESTILO DA NAVEGAÇÃO POR ABAS --- */
+.gestor-geral-nav {
+  display: flex;
+  gap: 1.5rem; /* Espaço entre os links */
+}
+
+.gestor-geral-nav a {
+  padding: 1rem 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6B7280; /* Cor da aba inativa (cinza) */
+  text-decoration: none;
+  border-bottom: 3px solid transparent; 
+  margin-bottom: -2px; /* Alinha a borda */
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gestor-geral-nav a:hover {
+  color: #111827; 
+}
+
+/* Estilo da ABA ATIVA */
+.gestor-geral-nav a.active {
+  color: #4F46E5; /* Cor primária (roxo/azul) */
+  border-bottom-color: #4F46E5; 
+}
+
+/* --- ESTILO DO BOTÃO SAIR --- */
+.btn-sair {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6B7280; /* Cinza (cor de logout) */
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-sair:hover {
+  background-color: #E5E7EB; /* Fundo cinza claro no hover */
+  color: #111827;
+}
+
+/* --- ESTILO DO CONTEÚDO DAS ABAS --- */
+.gestor-geral-conteudo {
+  padding: 2.5rem;
+}
+
+/* --- ESTILO DA SAUDAÇÃO --- */
+.gestor-geral-saudacao {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #E5E7EB; /* Linha divisória */
+}
+
+.gestor-geral-saudacao h2 {
+  font-size: 1.8rem;
+  color: #111827; /* Preto */
+  margin: 0 0 0.25rem 0; 
+}
+
+.gestor-geral-saudacao p {
+  font-size: 1rem;
+  color: #6B7280; /* Cinza */
+  margin: 0;
+}
+
+
+
+/* Garante que a aba ativa seja exibida */
+div[ng-reflect-ng-if="true"] {
+  display: block;
+}

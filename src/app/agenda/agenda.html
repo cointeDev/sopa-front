@@ -1,0 +1,119 @@
+<div class="agenda-details-panel" *ngIf="selectedDay()">
+  <header class="details-header">
+    <h3>
+      Detalhes do Dia: {{ selectedDay() | date:'fullDate' }}
+    </h3>
+    <button class="close-details-btn" (click)="selectedDay.set(null)">&times; Fechar</button>
+  </header>
+
+  <div class="details-list">
+    <div *ngFor="let event of selectedDayEvents()" class="details-event-card">
+      <div class="card-info" [style.border-left]="'4px solid ' + getStudioColor(event.studioId)">
+        <p class="event-title-full">{{ event.titulo }}</p>
+        <p class="event-meta">
+          <span class="meta-item">
+            {{ event.tipo === 'gravacao' ? '📹 Gravação' : '❗ Prazo Final' }}
+          </span>
+          <span class="meta-item" *ngIf="event.tipo === 'gravacao'">
+            Horário: {{ event.data | date:'HH:mm' }}
+          </span>
+          <span class="meta-item">
+            Estúdio: {{ event.studioId | titlecase }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main-calendar-layout">
+  
+  <div class="agenda-container">
+    
+    <header class="agenda-header">
+      <div class="month-selector">
+        <button (click)="changeMonth(-1)">&#8592; Anterior</button>
+        <h2>{{ displayMonth | date:'MMMM yyyy' | titlecase }}</h2>
+        <button (click)="changeMonth(1)">Próximo &#8594;</button>
+      </div>
+      
+      <div class="scope-info" *ngIf="scope === 'global'">
+        <p>Visão Global de Todos os Estúdios</p>
+      </div>
+      <div class="scope-info" *ngIf="scope === 'local'">
+        <p>Estúdio Selecionado: <strong>{{ studioId | titlecase }}</strong></p>
+      </div>
+    </header>
+
+    <div class="calendar-grid-weekdays">
+      <div *ngFor="let day of weekDays" class="weekday-header">{{ day }}</div>
+    </div>
+
+    <div class="calendar-grid-days">
+      <div *ngFor="let day of calendarDays()" 
+           class="calendar-day-cell"
+           [class.not-in-month]="!day"
+           [class.today]="day && isToday(day)"
+           [class.selected]="day && isSelectedDay(day)"
+           (click)="day && openDayDetails(day)">
+        
+        <span *ngIf="day" class="day-number">{{ day.getDate() }}</span>
+        
+        <div *ngIf="day" class="day-events">
+          <div *ngFor="let event of getEventsForDay(day); let i = index" class="event-badge" 
+               [style.background-color]="getStudioColor(event.studioId)">
+               
+            <span class="event-type-icon">{{ event.tipo === 'gravacao' ? '📹' : '❗' }}</span>
+            <span class="event-title">{{ event.titulo }}</span>
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sidebar-minis-area">
+
+    <div class="mini-calendar-area">
+      <div class="mini-calendar">
+        <div class="mini-calendar-header">
+          <button class="mini-nav-btn" (click)="changeMonth(-1)" title="Mês Anterior">&lt;</button>
+          <span class="mini-month">{{ prevMonthDate() | date:'MMM' | titlecase }}</span>
+        </div>
+        <div class="mini-grid-weekdays">
+          <div *ngFor="let day of miniWeekDays" class="mini-weekday-header">{{ day }}</div>
+        </div>
+        <div class="mini-grid-days">
+          <div *ngFor="let day of prevMonthDays()" 
+               class="mini-day-cell"
+               [class.has-events]="day && hasEvents(day)">
+            <span *ngIf="day" class="mini-day-number">{{ day.getDate() }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mini-calendar-area">
+      <div class="mini-calendar">
+        <div class="mini-calendar-header">
+          <span class="mini-month">{{ nextMonthDate() | date:'MMM' | titlecase }}</span>
+          <button class="mini-nav-btn" (click)="changeMonth(1)" title="Próximo Mês">&gt;</button>
+        </div>
+        <div class="mini-grid-weekdays">
+          <div *ngFor="let day of miniWeekDays" class="mini-weekday-header">{{ day }}</div>
+        </div>
+        <div class="mini-grid-days">
+          <div *ngFor="let day of nextMonthDays()" 
+               class="mini-day-cell"
+               [class.has-events]="day && hasEvents(day)">
+            <span *ngIf="day" class="mini-day-number">{{ day.getDate() }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+</div>
