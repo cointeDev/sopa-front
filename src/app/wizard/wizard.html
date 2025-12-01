@@ -42,7 +42,7 @@
             <select id="estudio" name="estudio">
                 <option value="">Selecione o local...</option>
                 <option value="natal">Natal</option>
-                <option value="mossoro">Mossoró</option>
+                <option value="mossoro">Mossoro</option>
                 <option value="pau_dos_ferros">Pau dos Ferros</option>
                 <option value="caico">Caicó</option>
             </select>
@@ -50,7 +50,7 @@
         <div class="grid-duplo">
             <div>
                 <label for="data_gravacao">Data Pretendida</label>
-                <input type="date" id="data_gravacao" name="data_gravacao">
+                <input type="date" id="data_gravacao" name="data_gravacao" [(ngModel)]="formData.data_gravacao" [min]="minDate">
             </div>
             <div>
                 <label for="hora_gravacao">Horário Pretendido</label>
@@ -69,6 +69,7 @@
         <div class="tipo-producao">
             <div>
                 <input type="radio" id="tipo-institucional" name="tipo_producao" value="institucional" data-limit="15"
+                    [(ngModel)]="formData.tipo_producao"
                     (change)="atualizarDescricao('Um vídeo para apresentar formalmente o seu setor, um projeto ou a instituição como um todo.')">
                 <label for="tipo-institucional">
                     Vídeo Institucional
@@ -77,6 +78,7 @@
             </div>
             <div>
                 <input type="radio" id="tipo-chamada" name="tipo_producao" value="chamada" data-limit="5"
+                    [(ngModel)]="formData.tipo_producao"
                     (change)="atualizarDescricao('Um vídeo curto e direto, focado em convidar o público para um evento, inscrição ou ação específica.')">
                 <label for="tipo-chamada">
                     Chamada
@@ -85,6 +87,7 @@
             </div>
             <div>
                 <input type="radio" id="tipo-reels" name="tipo_producao" value="reels" data-limit="3"
+                    [(ngModel)]="formData.tipo_producao"
                     (change)="atualizarDescricao('Vídeo curto em formato vertical (9:16), ideal para consumo rápido em redes sociais como Instagram e TikTok.')">
                 <label for="tipo-reels">
                     Reels / Short
@@ -93,6 +96,7 @@
             </div>
             <div>
                 <input type="radio" id="tipo-videoaula" name="tipo_producao" value="videoaula" data-limit="3"
+                    [(ngModel)]="formData.tipo_producao"
                     (change)="atualizarDescricao('Formato de aula expositiva, focado na explicação de um conteúdo didático, geralmente com apoio de slides ou lousa.')">
                 <label for="tipo-videoaula">
                     Video-Aula
@@ -101,6 +105,7 @@
             </div>
             <div>
                 <input type="radio" id="tipo-live" name="tipo_producao" value="live" data-limit="10"
+                    [(ngModel)]="formData.tipo_producao"
                     (change)="atualizarDescricao('Transmissão ao vivo para interação direta com o público, ideal para eventos, debates ou anúncios importantes.')">
                 <label for="tipo-live">
                     Live
@@ -109,6 +114,7 @@
             </div>
             <div>
                 <input type="radio" id="tipo-podcast" name="tipo_producao" value="podcast" data-limit="6"
+                    [(ngModel)]="formData.tipo_producao"
                     (change)="atualizarDescricao('Produção focada em áudio (Podcast) ou em vídeo de bate-papo (Mesacast), ideal para entrevistas e discussões.')">
                 <label for="tipo-podcast">
                     Podcast / Mesacast
@@ -144,7 +150,8 @@
             <input type="file" id="thumbnail" name="thumbnail" accept="image/png, image/jpeg">
             <small>Envie um arquivo PNG ou JPG (Tamanho ideal: 1920x1080px)</small>
         </div>
-        <div class="checkbox-group">
+        
+        <div class="checkbox-group" *ngIf="formData.tipo_producao !== 'podcast' && formData.tipo_producao !== 'reels'">
             <label>Acessibilidade</label>
             <div class="checkbox-horizontal">
                 <label for="acess-libras">
@@ -161,9 +168,10 @@
                 </label>
             </div>
         </div>
+        
         <div>
             <label for="distribuicao">Distribuição do Material</label>
-            <select id="distribuicao" name="distribuicao">
+            <select id="distribuicao" name="distribuicao" [(ngModel)]="formData.distribuicao">
                 <option value="">Selecione onde será distribuído...</option>
                 <option value="proprio_setor">Próprio Setor</option>
                 <option value="seec">SEEC</option>
@@ -172,6 +180,12 @@
                 <option value="na">Não se aplica</option>
             </select>
         </div>
+        
+        <div *ngIf="formData.distribuicao === 'outro'">
+            <label for="outra_distribuicao">Onde será distribuído (Especifique)</label>
+            <input type="text" id="outra_distribuicao" name="outra_distribuicao" [(ngModel)]="formData.outra_distribuicao" placeholder="Ex: Canal do YouTube da Escola X">
+        </div>
+        
         <div class="botoes-navegacao">
             <button type="button" class="btn-secundario" (click)="passoAnterior(2)">Voltar</button>
             <button type="button" class="btn-primario" (click)="proximoPasso(4)" style="width: auto;">Avançar</button>

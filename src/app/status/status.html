@@ -5,6 +5,11 @@
       <div>
         <h2>Vídeo Aula de Cálculo</h2>
         <span class="status-tag em-andamento">EM ANDAMENTO</span>
+        
+        <p class="data-estimada" *ngIf="dataEstimada">
+            **Entrega Estimada:** {{ dataEstimada | date:'fullDate' }}
+        </p>
+
       </div>
       <a routerLink="/" class="link-voltar">&larr; Voltar ao Início</a>
     </header>

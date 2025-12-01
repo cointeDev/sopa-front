@@ -1,42 +1,42 @@
-import { Component, OnInit } from '@angular/core'; // <-- 1. IMPORTE OnInit
-import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { ActivatedRoute } from '@angular/router'; // <-- 2. IMPORTE ActivatedRoute
+import { Component, OnInit } from '@angular/core'; 
+import { CommonModule, DatePipe } from '@angular/common'; // CommonModule e DatePipe
+import { RouterLink } from '@angular/router'; // CORREÇÃO: RouterLink VEM de @angular/router
+import { ActivatedRoute } from '@angular/router'; 
 
 @Component({
   selector: 'app-status',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, DatePipe], // DatePipe e RouterLink estão corretos no array
   templateUrl: './status.html',
   styleUrl: './status.css'
 })
-export class StatusComponent implements OnInit { // <-- 3. IMPLEMENTE OnInit
+export class StatusComponent implements OnInit { 
 
   // Variáveis de Status (começam como FALSAS)
   isTracking: boolean = false;
   isRejected: boolean = false;
   isReturnedForCorrection: boolean = false;
 
-  // 4. INJETE O ActivatedRoute
+  // Variável para a data limite estimada (simulada)
+  dataEstimada: Date | null = null; 
+
   constructor(private route: ActivatedRoute) { }
 
-  // 5. ADICIONE A LÓGICA DE TESTE
   ngOnInit(): void {
-    // Pega o parâmetro 'token' da URL (o que vem depois de /status/)
     const token = this.route.snapshot.paramMap.get('token');
+    
+    // Simulação da data limite (Ex: 10 dias após a gravação)
+    // Se a gravação foi dia 2025/11/27, o prazo estimado é 2025/12/7.
+    this.dataEstimada = new Date(2025, 11, 7); 
 
     // Lógica de teste com seus tokens
     if (token === '11111') {
-      // 11111 = Mostra Acompanhamento
       this.isTracking = true;
     } else if (token === '22222') {
-      // 22222 = Mostra Devolução/Correção
       this.isReturnedForCorrection = true;
     } else if (token === '33333') {
-      // 33333 = Mostra Negação
       this.isRejected = true;
     } else {
-      // Se o token for inválido, mostra o acompanhamento (ou um erro)
       this.isTracking = true; 
     }
   }
