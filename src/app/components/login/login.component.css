@@ -1,0 +1,101 @@
+.login-container {
+  max-width: 450px;
+  background-color: #FFFFFF;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  margin: 40px auto;
+  text-align: left;
+}
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.logo-container img {
+  height: 200px;
+  width: auto;
+}
+
+.login-container h1 {
+  color: #111827;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.login-container p {
+  color: #4B5563;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.login-form {
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  box-sizing: border-box; 
+  font-size: 1rem;
+  background-color: #F9FAFB;
+  transition: all 0.2s ease;
+}
+
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
+  border-color: #4F46E5;
+  background-color: #FFF;
+  box-shadow: 0 0 0 2px #C7D2FE;
+  outline: none;
+}
+
+.btn-primario {
+  background-color: #6366F1; 
+  color: white;
+  width: 100%; 
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primario:hover {
+  background-color: #4F46E5;
+}
+
+.voltar-link-container {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.link-secundario {
+  color: #4F46E5;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.link-secundario:hover {
+  text-decoration: underline;
+}

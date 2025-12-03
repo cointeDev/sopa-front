@@ -1,0 +1,84 @@
+.operacional-painel {
+  max-width: 1200px;
+  margin: 40px auto;
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  overflow: hidden; 
+}
+
+.operacional-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #F9FAFB;
+  border-bottom: 2px solid #E5E7EB;
+  padding: 0 1.5rem 0 2.5rem; 
+}
+
+.operacional-nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.operacional-nav a {
+  padding: 1rem 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6B7280;
+  text-decoration: none;
+  border-bottom: 3px solid transparent; 
+  margin-bottom: -2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.operacional-nav a:hover {
+  color: #111827; 
+}
+
+.operacional-nav a.active {
+  color: #4F46E5;
+  border-bottom-color: #4F46E5; 
+}
+
+.btn-sair {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6B7280;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-sair:hover {
+  background-color: #E5E7EB;
+  color: #111827;
+}
+
+.operacional-conteudo {
+  padding: 2.5rem;
+}
+
+
+div[ng-reflect-ng-if="true"] {
+  display: block;
+}
+.operacional-saudacao {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.operacional-saudacao h2 {
+  font-size: 1.8rem;
+  color: #111827;
+  margin: 0 0 0.25rem 0;
+}
+
+.operacional-saudacao p {
+  font-size: 1rem;
+  color: #6B7280;
+  margin: 0;
+}
