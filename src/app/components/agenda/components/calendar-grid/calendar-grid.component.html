@@ -1,0 +1,18 @@
+<div class="calendar-grid">
+  <div class="calendar-header">
+    <div *ngFor="let day of ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']">
+      {{ day }}
+    </div>
+  </div>
+
+  <div class="calendar-body">
+    <div 
+      *ngFor="let day of daysInMonth()"
+      class="calendar-day"
+      [class.empty]="day === null"
+      (click)="selectDate(day)"
+    >
+      <span>{{ day }}</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+.event-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.event-card {
+  padding: 8px;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.event-card:hover {
+  background: #f0f0f0;
+}
+
+.event-time {
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+.event-title {
+  font-size: .9rem;
+}
+
+.event-type {
+  font-size: .75rem;
+  color: #555;
+}
+
+.no-event-msg {
+  font-size: .85rem;
+  margin-top: 8px;
+  opacity: 0.6;
+  text-align: center;
+}

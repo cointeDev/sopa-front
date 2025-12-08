@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core'; 
 import { CommonModule } from '@angular/common'; 
 import { RouterLink } from '@angular/router'; 
-import { Agenda } from '../agenda/agenda.component';
+import { AgendaComponent  } from '../agenda/agenda.component';
 
 @Component({
   selector: 'app-gestor-geral',
   standalone: true,
-  imports: [CommonModule, RouterLink, Agenda],
+  imports: [CommonModule, RouterLink, AgendaComponent ],
   templateUrl: './gestor-geral.component.html',
   styleUrl: './gestor-geral.component.css'
 })

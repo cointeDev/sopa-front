@@ -1,0 +1,11 @@
+<div class="event-container" *ngIf="events.length > 0; else noEvents">
+  <div class="event-card" *ngFor="let event of events" (click)="selectEvent(event)">
+    <div class="event-time">{{ event.time }}</div>
+    <div class="event-title">{{ event.title }}</div>
+    <div class="event-type">{{ event.type }}</div>
+  </div>
+</div>
+
+<ng-template #noEvents>
+  <p class="no-event-msg">Nenhum evento neste dia.</p>
+</ng-template>

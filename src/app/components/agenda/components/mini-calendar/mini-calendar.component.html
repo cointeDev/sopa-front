@@ -1,0 +1,19 @@
+<div class="mini-calendar">
+  <div class="mini-header">
+    <button class="nav-button" (click)="previousMonth()">‹</button>
+    <span class="month-title">
+      {{ monthName | titlecase }} {{ year }}
+    </span>
+    <button class="nav-button" (click)="nextMonth()">›</button>
+  </div>
+
+  <div class="mini-grid">
+    <span *ngFor="let day of ['D','S','T','Q','Q','S','S']" class="weekday">
+      {{ day }}
+    </span>
+
+    <div *ngFor="let d of days" class="mini-day">
+      {{ d }}
+    </div>
+  </div>
+</div>
