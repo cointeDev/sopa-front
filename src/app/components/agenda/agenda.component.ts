@@ -7,32 +7,26 @@ import { MiniCalendarComponent } from './components/mini-calendar/mini-calendar.
 @Component({
   selector: 'app-agenda',
   standalone: true,
-  imports: [
-    CommonModule,
-    CalendarGridComponent,
-    EventListComponent,
-    MiniCalendarComponent
-  ],
+  imports: [CommonModule, CalendarGridComponent, EventListComponent, MiniCalendarComponent],
   templateUrl: './agenda.component.html',
-  styleUrls: ['./agenda.component.css']
+  styleUrls: ['./agenda.component.css'],
 })
 export class AgendaComponent {
-
   currentMonth = signal(new Date().getMonth());
   currentYear = signal(new Date().getFullYear());
   selectedDate = signal<Date | null>(new Date());
 
   events = signal<AgendaEvent[]>([
     { id: 1, title: 'Aula Matemática', time: '08:00', type: 'Gravado', studioId: 1 },
-    { id: 2, title: 'Reunião Projeto X', time: '10:00', type: 'Ao Vivo', studioId: 2 }
+    { id: 2, title: 'Reunião Projeto X', time: '10:00', type: 'Ao Vivo', studioId: 2 },
   ]);
 
   dailyEvents = computed(() => {
     const selected = this.selectedDate();
     if (!selected) return [];
 
-    return this.events().filter(e => {
-      const eventDate = new Date();
+    return this.events().filter((e) => {
+      const eventDate = new Date(e.time);
       return (
         eventDate.getFullYear() === selected.getFullYear() &&
         eventDate.getMonth() === selected.getMonth() &&
@@ -41,8 +35,15 @@ export class AgendaComponent {
     });
   });
 
+  dailyEventsList: AgendaEvent[] = [];
+
+  constructor() {
+    this.dailyEventsList = this.dailyEvents();
+  }
+
   onDateSelected(date: Date) {
     this.selectedDate.set(date);
+    this.dailyEventsList = this.dailyEvents();
   }
 
   nextMonth() {

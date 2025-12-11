@@ -1,4 +1,12 @@
-export interface Event {
+export interface AgendaEvent {
+  id: number;
+  title: string;
+  time: string;
+  type: string;
+  studioId: number;
+}
+
+export interface StudioEvent {
   id: number;
   date: Date;
   title: string;

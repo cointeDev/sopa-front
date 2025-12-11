@@ -1,12 +1,28 @@
-import { Injectable, signal } from '@angular/core';
-import { Event } from '../types/event.types';
+import { Injectable } from '@angular/core';
+import { signal } from '@angular/core';  // Importando a funcionalidade do signal
+import { StudioEvent } from '../types/event.types';
+import { LocalStorageKeys } from '../../../local-storage/local-storage.keys';
+import { LocalStorageData } from '../../../local-storage/local-storage.data';
 
 @Injectable({ providedIn: 'root' })
 export class AgendaService {
-  private eventsMock: Event[] = [
-    { id: 1, date: new Date(), title: 'Show Banda X', studio: 'Studio 1', start: '10:00', end: '12:00', color: '#FF6B6B' },
-    { id: 2, date: new Date(), title: 'Gravação Podcast', studio: 'Studio 2', start: '14:00', end: '16:00', color: '#4ECDC4' },
-  ];
 
-  events = signal<Event[]>(this.eventsMock);
+  private storageKey = LocalStorageKeys.AGENDA_EVENTS;
+
+  events = signal<StudioEvent[]>(this.loadEvents());
+
+  private loadEvents(): StudioEvent[] {
+    const saved = localStorage.getItem(this.storageKey);
+
+    if (saved) {
+      return JSON.parse(saved);
+    }
+
+    return LocalStorageData.AGENDA_EVENTS_DEFAULT;
+  }
+
+  saveEvents(events: StudioEvent[]) {
+    this.events.set(events);
+    localStorage.setItem(this.storageKey, JSON.stringify(events));
+  }
 }
